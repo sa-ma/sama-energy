@@ -1,0 +1,13 @@
+{
+  "name": "sama-energy",
+  "private": true,
+  "packageManager": "pnpm@10.17.1",
+  "scripts": {
+    "dev": "turbo dev --filter=@sama-energy/web",
+    "build": "turbo run build",
+    "lint": "turbo run lint"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.4"
+  }
+}
