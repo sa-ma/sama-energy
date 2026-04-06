@@ -44,7 +44,9 @@ test('GET /forecast/overview returns a GB overview payload', async () => {
     durationHours: 2,
     dateRange: '12M',
   });
-  assert.equal(body.summaryMetrics.length, 3);
+  assert.equal(body.summaryMetrics.length, 4);
+  assert.equal(body.summaryMetrics[1].id, 'volatility-index');
+  assert.equal(body.summaryMetrics[1].unit, 'index');
   assert.equal(body.trendData.length, 12);
   assert.equal(body.forecastPreview.length, 3);
 
@@ -64,6 +66,7 @@ test('GET /forecast/overview returns an ERCOT overview payload', async () => {
   const body = response.json();
 
   assert.equal(body.filters.market, 'ERCOT');
+  assert.equal(body.summaryMetrics.length, 4);
   assert.equal(body.summaryMetrics[0].unit, 'USD/month');
 
   await app.close();

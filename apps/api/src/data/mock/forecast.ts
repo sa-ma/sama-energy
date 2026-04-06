@@ -8,6 +8,8 @@ import type {
 interface OverviewSeed {
   avgRevenue: number;
   avgRevenueChangePct: number;
+  volatilityIndex: number;
+  volatilityIndexChangePct: number;
   utilization: number;
   utilizationChangePct: number;
   spreadPeak: number;
@@ -23,6 +25,8 @@ const overviewSeeds: Record<MarketCode, MarketDurationSeeds> = {
     1: {
       avgRevenue: 38100,
       avgRevenueChangePct: 6.7,
+      volatilityIndex: 18.4,
+      volatilityIndexChangePct: 1.8,
       utilization: 89,
       utilizationChangePct: 2.4,
       spreadPeak: 96,
@@ -33,6 +37,8 @@ const overviewSeeds: Record<MarketCode, MarketDurationSeeds> = {
     2: {
       avgRevenue: 45200,
       avgRevenueChangePct: 8.4,
+      volatilityIndex: 22.6,
+      volatilityIndexChangePct: 2.3,
       utilization: 85,
       utilizationChangePct: 3.2,
       spreadPeak: 112,
@@ -43,6 +49,8 @@ const overviewSeeds: Record<MarketCode, MarketDurationSeeds> = {
     4: {
       avgRevenue: 53100,
       avgRevenueChangePct: 9.1,
+      volatilityIndex: 26.9,
+      volatilityIndexChangePct: 2.7,
       utilization: 79,
       utilizationChangePct: 2.7,
       spreadPeak: 129,
@@ -55,6 +63,8 @@ const overviewSeeds: Record<MarketCode, MarketDurationSeeds> = {
     1: {
       avgRevenue: 42900,
       avgRevenueChangePct: 7.9,
+      volatilityIndex: 20.1,
+      volatilityIndexChangePct: 2.1,
       utilization: 86,
       utilizationChangePct: 2.9,
       spreadPeak: 108,
@@ -65,6 +75,8 @@ const overviewSeeds: Record<MarketCode, MarketDurationSeeds> = {
     2: {
       avgRevenue: 49800,
       avgRevenueChangePct: 9.2,
+      volatilityIndex: 24.8,
+      volatilityIndexChangePct: 2.5,
       utilization: 81,
       utilizationChangePct: 2.1,
       spreadPeak: 128,
@@ -84,6 +96,12 @@ const rangeMonthCount: Record<DateRange, number> = {
 const rangeRevenueAdjustment: Record<DateRange, number> = {
   '3M': 1200,
   '6M': 600,
+  '12M': 0,
+};
+
+const rangeVolatilityAdjustment: Record<DateRange, number> = {
+  '3M': 1.8,
+  '6M': 0.9,
   '12M': 0,
 };
 
@@ -125,6 +143,9 @@ export function buildOverviewFixture(
 
   const monthCount = rangeMonthCount[dateRange];
   const revenueBaseline = seed.avgRevenue + rangeRevenueAdjustment[dateRange];
+  const volatilityBaseline = round(
+    (seed.volatilityIndex + rangeVolatilityAdjustment[dateRange]) * 10,
+  ) / 10;
 
   const trendData = Array.from({ length: monthCount }, (_, index) => {
     const monthsFromStart = monthCount - index - 1;
@@ -164,6 +185,13 @@ export function buildOverviewFixture(
         value: revenueBaseline,
         unit: `${currency}/month`,
         changePct: seed.avgRevenueChangePct,
+      },
+      {
+        id: 'volatility-index',
+        label: 'Volatility Index',
+        value: volatilityBaseline,
+        unit: 'index',
+        changePct: seed.volatilityIndexChangePct,
       },
       {
         id: 'utilization',

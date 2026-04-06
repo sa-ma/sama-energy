@@ -26,9 +26,18 @@ export const ForecastFiltersSchema = Type.Object(
   { additionalProperties: false },
 );
 
+export const SummaryMetricIdSchema = Type.Union([
+  Type.Literal('avg-revenue'),
+  Type.Literal('volatility-index'),
+  Type.Literal('utilization'),
+  Type.Literal('spread-peak'),
+]);
+
+export type SummaryMetricId = Static<typeof SummaryMetricIdSchema>;
+
 export const SummaryMetricSchema = Type.Object(
   {
-    id: Type.String(),
+    id: SummaryMetricIdSchema,
     label: Type.String(),
     value: Type.Number(),
     unit: Type.String(),
@@ -60,7 +69,7 @@ export const ForecastPreviewPointSchema = Type.Object(
 export const ForecastOverviewResponseSchema = Type.Object(
   {
     filters: ForecastFiltersSchema,
-    summaryMetrics: Type.Array(SummaryMetricSchema, { minItems: 1 }),
+    summaryMetrics: Type.Array(SummaryMetricSchema, { minItems: 4, maxItems: 4 }),
     trendData: Type.Array(TrendPointSchema, { minItems: 1 }),
     forecastPreview: Type.Array(ForecastPreviewPointSchema, { minItems: 1 }),
   },

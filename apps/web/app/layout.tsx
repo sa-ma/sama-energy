@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 import AppThemeProvider from '@/components/app-theme-provider';
+import QueryProvider from '@/components/query-provider';
 
 import './globals.css';
 
@@ -27,7 +29,11 @@ export default function RootLayout({
     <html lang="en" className={roboto.variable}>
       <body>
         <AppRouterCacheProvider>
-          <AppThemeProvider>{children}</AppThemeProvider>
+          <AppThemeProvider>
+            <NuqsAdapter>
+              <QueryProvider>{children}</QueryProvider>
+            </NuqsAdapter>
+          </AppThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>
