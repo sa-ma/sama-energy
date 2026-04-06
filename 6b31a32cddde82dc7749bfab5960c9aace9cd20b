@@ -1,0 +1,31 @@
+apps/web/app/dashboard/overview/_components/recent-summary-table.tsx
+  08f0c5934c3391ac 1-167
+packages/contracts/src/forecast.ts
+  08f0c5934c3391ac 69-81,88
+apps/api/src/app.test.ts
+  08f0c5934c3391ac 52-54,74
+apps/api/src/data/mock/forecast.ts
+  08f0c5934c3391ac 125-151,202-207,246-271
+apps/web/app/dashboard/overview/_components/overview-dashboard.tsx
+  08f0c5934c3391ac 36,367-381
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.5",
+  "base_commit_sha": "6b31a32cddde82dc7749bfab5960c9aace9cd20b",
+  "prompts": {
+    "08f0c5934c3391ac": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019d648b-1153-7b93-b706-576c92a5e91d",
+        "model": "gpt-5.4"
+      },
+      "human_author": "Samaila Bala",
+      "messages": [],
+      "total_additions": 271,
+      "total_deletions": 11,
+      "accepted_lines": 260,
+      "overriden_lines": 0
+    }
+  }
+}
