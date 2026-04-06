@@ -33,6 +33,7 @@ import ForecastChart from './forecast-chart';
 import MetricCard from './metric-card';
 import OverviewFilterBar from './overview-filter-bar';
 import OverviewHeader from './overview-header';
+import RecentSummaryTable from './recent-summary-table';
 import SectionPanel from './section-panel';
 import TrendChart from './trend-chart';
 
@@ -363,6 +364,21 @@ export default function OverviewDashboard() {
               ) : null}
             </SectionPanel>
           </Box>
+
+          <SectionPanel
+            title="Recent Market Summary"
+            subtitle="Latest versus prior-period market indicators"
+            minHeight={0}
+            contentGap={1.5}
+            contentPadding={{ xs: 1.75, sm: 2, md: 2.25 }}
+            headerSpacing={0.45}
+          >
+            <RecentSummaryTable
+              currency={selectedMarket.currency}
+              loading={isInitialLoading}
+              rows={overviewQuery.data?.recentSummary}
+            />
+          </SectionPanel>
         </>
       )}
     </Box>

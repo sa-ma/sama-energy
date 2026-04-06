@@ -122,6 +122,33 @@ function round(value: number): number {
   return Math.round(value);
 }
 
+function roundToSingleDecimal(value: number): number {
+  return Math.round(value * 10) / 10;
+}
+
+function buildRecentSummaryRow({
+  metric,
+  latest,
+  prior,
+  unit,
+}: {
+  metric: string;
+  latest: number;
+  prior: number;
+  unit: string;
+}) {
+  const safePrior = prior === 0 ? 1 : prior;
+  const changePct = ((latest - prior) / safePrior) * 100;
+
+  return {
+    metric,
+    latest,
+    prior,
+    changePct: roundToSingleDecimal(changePct),
+    unit,
+  };
+}
+
 export function hasOverviewSeed(
   market: MarketCode,
   durationHours: DurationHours,
@@ -172,6 +199,12 @@ export function buildOverviewFixture(
     };
   });
 
+  const latestTrendPoint = trendData[trendData.length - 1];
+  const priorTrendPoint = trendData[Math.max(trendData.length - 2, 0)];
+  const volatilityPrior = roundToSingleDecimal(
+    volatilityBaseline / (1 + seed.volatilityIndexChangePct / 100),
+  );
+
   return {
     filters: {
       market,
@@ -210,5 +243,31 @@ export function buildOverviewFixture(
     ],
     trendData,
     forecastPreview,
+    recentSummary: [
+      buildRecentSummaryRow({
+        metric: 'Avg Revenue',
+        latest: latestTrendPoint.revenue,
+        prior: priorTrendPoint.revenue,
+        unit: `${currency}/month`,
+      }),
+      buildRecentSummaryRow({
+        metric: 'Price Spread',
+        latest: latestTrendPoint.priceSpread,
+        prior: priorTrendPoint.priceSpread,
+        unit: currency,
+      }),
+      buildRecentSummaryRow({
+        metric: 'Utilization',
+        latest: latestTrendPoint.utilization,
+        prior: priorTrendPoint.utilization,
+        unit: '%',
+      }),
+      buildRecentSummaryRow({
+        metric: 'Volatility Index',
+        latest: volatilityBaseline,
+        prior: volatilityPrior,
+        unit: 'index',
+      }),
+    ],
   };
 }

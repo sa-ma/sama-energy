@@ -8,6 +8,9 @@ type SectionPanelProps = Readonly<{
   title: string;
   subtitle?: string;
   minHeight?: number;
+  contentPadding?: { xs: number; sm: number; md: number };
+  headerSpacing?: number;
+  contentGap?: number;
 }>;
 
 export default function SectionPanel({
@@ -15,6 +18,9 @@ export default function SectionPanel({
   title,
   subtitle,
   minHeight = 320,
+  contentPadding = { xs: 2, sm: 2.5, md: 3 },
+  headerSpacing = 0.75,
+  contentGap = 2.5,
 }: SectionPanelProps) {
   return (
     <Card
@@ -30,14 +36,14 @@ export default function SectionPanel({
       <CardContent
         sx={{
           height: 1,
-          p: { xs: 2, sm: 2.5, md: 3 },
+          p: contentPadding,
           display: 'flex',
           flexDirection: 'column',
-          gap: 2.5,
-          '&:last-child': { pb: { xs: 2, sm: 2.5, md: 3 } },
+          gap: contentGap,
+          '&:last-child': { pb: contentPadding },
         }}
       >
-        <Stack spacing={0.75}>
+        <Stack spacing={headerSpacing}>
           <Typography
             component="h2"
             sx={{
@@ -49,7 +55,7 @@ export default function SectionPanel({
             {title}
           </Typography>
           {subtitle ? (
-            <Typography variant="body2" sx={{ color: '#4b5563' }}>
+            <Typography variant="body2" sx={{ color: '#4b5563', lineHeight: 1.4 }}>
               {subtitle}
             </Typography>
           ) : null}

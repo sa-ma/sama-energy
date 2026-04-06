@@ -66,12 +66,26 @@ export const ForecastPreviewPointSchema = Type.Object(
   { additionalProperties: false },
 );
 
+export const RecentSummaryRowSchema = Type.Object(
+  {
+    metric: Type.String(),
+    latest: Type.Number(),
+    prior: Type.Number(),
+    changePct: Type.Number(),
+    unit: Type.String(),
+  },
+  { additionalProperties: false },
+);
+
+export type RecentSummaryRow = Static<typeof RecentSummaryRowSchema>;
+
 export const ForecastOverviewResponseSchema = Type.Object(
   {
     filters: ForecastFiltersSchema,
     summaryMetrics: Type.Array(SummaryMetricSchema, { minItems: 4, maxItems: 4 }),
     trendData: Type.Array(TrendPointSchema, { minItems: 1 }),
     forecastPreview: Type.Array(ForecastPreviewPointSchema, { minItems: 1 }),
+    recentSummary: Type.Array(RecentSummaryRowSchema, { minItems: 4, maxItems: 4 }),
   },
   { $id: 'ForecastOverviewResponse', additionalProperties: false },
 );

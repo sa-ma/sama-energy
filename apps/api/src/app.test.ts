@@ -49,6 +49,9 @@ test('GET /forecast/overview returns a GB overview payload', async () => {
   assert.equal(body.summaryMetrics[1].unit, 'index');
   assert.equal(body.trendData.length, 12);
   assert.equal(body.forecastPreview.length, 3);
+  assert.equal(body.recentSummary.length, 4);
+  assert.equal(body.recentSummary[0].metric, 'Avg Revenue');
+  assert.equal(body.recentSummary[1].metric, 'Price Spread');
 
   await app.close();
 });
@@ -68,6 +71,7 @@ test('GET /forecast/overview returns an ERCOT overview payload', async () => {
   assert.equal(body.filters.market, 'ERCOT');
   assert.equal(body.summaryMetrics.length, 4);
   assert.equal(body.summaryMetrics[0].unit, 'USD/month');
+  assert.equal(body.recentSummary[3].metric, 'Volatility Index');
 
   await app.close();
 });
