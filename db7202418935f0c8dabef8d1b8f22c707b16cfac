@@ -1,0 +1,37 @@
+apps/api/package.json
+  a9dda313d641b90d 1-24
+package.json
+  a9dda313d641b90d 6,8-9
+apps/api/.env.example
+  a9dda313d641b90d 1-2
+apps/api/tsconfig.json
+  a9dda313d641b90d 1-12
+apps/api/README.md
+  a9dda313d641b90d 3,5-13
+apps/api/tsup.config.ts
+  a9dda313d641b90d 1-10
+README.md
+  a9dda313d641b90d 3,8-9,17-23
+turbo.json
+  a9dda313d641b90d 6,11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.5",
+  "base_commit_sha": "db7202418935f0c8dabef8d1b8f22c707b16cfac",
+  "prompts": {
+    "a9dda313d641b90d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019d6400-e7bb-7183-b3c3-58b2943753a0",
+        "model": "gpt-5.4"
+      },
+      "human_author": "Samaila Bala",
+      "messages": [],
+      "total_additions": 269,
+      "total_deletions": 202,
+      "accepted_lines": 76,
+      "overriden_lines": 0
+    }
+  }
+}
