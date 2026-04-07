@@ -13,6 +13,7 @@ export default function OverviewLoadingShell() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 3, md: 4 } }}>
       <DashboardPageHeader
+        title="Market Overview"
         subtitle="Explore battery market performance, trends, and forecast signals"
       />
 

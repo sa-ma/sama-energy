@@ -5,13 +5,15 @@ import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
+type ResponsiveBleed = boolean | Partial<Record<'xs' | 'sm' | 'md', boolean>>;
+
 type SectionPanelProps = Readonly<{
   children: React.ReactNode;
   title: string;
   subtitle?: string;
   minHeight?: number;
   contentPadding?: { xs: number; sm: number; md: number };
-  bleedContentX?: boolean;
+  bleedContentX?: ResponsiveBleed;
   headerSpacing?: number;
   contentGap?: number;
 }>;
@@ -26,6 +28,19 @@ export function SectionPanel({
   headerSpacing = 0.75,
   contentGap = 2.5,
 }: SectionPanelProps) {
+  const bleedByBreakpoint =
+    typeof bleedContentX === 'boolean'
+      ? {
+          xs: bleedContentX,
+          sm: bleedContentX,
+          md: bleedContentX,
+        }
+      : {
+          xs: bleedContentX?.xs ?? false,
+          sm: bleedContentX?.sm ?? false,
+          md: bleedContentX?.md ?? false,
+        };
+
   return (
     <Card
       sx={(theme) => ({
@@ -71,12 +86,12 @@ export function SectionPanel({
           sx={{
             flex: 1,
             minHeight,
-            ...(bleedContentX
+            ...(bleedByBreakpoint.xs || bleedByBreakpoint.sm || bleedByBreakpoint.md
               ? {
                   mx: {
-                    xs: -contentPadding.xs,
-                    sm: -contentPadding.sm,
-                    md: -contentPadding.md,
+                    xs: bleedByBreakpoint.xs ? -contentPadding.xs : 0,
+                    sm: bleedByBreakpoint.sm ? -contentPadding.sm : 0,
+                    md: bleedByBreakpoint.md ? -contentPadding.md : 0,
                   },
                 }
               : null),

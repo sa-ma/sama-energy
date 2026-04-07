@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import {
   FilterRail,
   FilterSegmentedControl,
@@ -20,6 +19,18 @@ type SelectOption<T extends string | number> = {
   value: T;
   label: string;
 };
+
+const visuallyHidden = {
+  border: 0,
+  clip: 'rect(0 0 0 0)',
+  height: 1,
+  margin: -1,
+  overflow: 'hidden',
+  padding: 0,
+  position: 'absolute',
+  whiteSpace: 'nowrap',
+  width: 1,
+} as const;
 
 type OverviewFilterBarProps = {
   market: string;
@@ -58,6 +69,7 @@ export default function OverviewFilterBar({
         >
           <Box>
             <FilterSelectField
+              ariaLabel="Market"
               value={market}
               onChange={(value) => onMarketChange(value as MarketCode)}
               sx={{ minWidth: { xs: '100%', md: 180 } }}
@@ -80,19 +92,35 @@ export default function OverviewFilterBar({
               ml: { md: 'auto' },
             }}
           >
-            {isUpdating ? (
-              <Stack
-                alignItems="center"
-                direction="row"
-                spacing={0.75}
-                sx={(theme) => ({ color: theme.sama.text.secondary, pr: 0.5 })}
-              >
-                <CircularProgress size={14} thickness={5} />
-                <Typography variant="body2">Updating</Typography>
-              </Stack>
-            ) : null}
+            <Box
+              sx={(theme) => ({
+                width: 18,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: theme.sama.text.secondary,
+                pr: 0.5,
+                flexShrink: 0,
+              })}
+              aria-atomic={isUpdating ? 'true' : undefined}
+              aria-live={isUpdating ? 'polite' : undefined}
+              role={isUpdating ? 'status' : undefined}
+            >
+              <CircularProgress
+                aria-hidden="true"
+                size={14}
+                thickness={5}
+                sx={{ visibility: isUpdating ? 'visible' : 'hidden' }}
+              />
+              {isUpdating ? (
+                <Box component="span" sx={visuallyHidden}>
+                  Updating…
+                </Box>
+              ) : null}
+            </Box>
 
             <FilterSegmentedControl
+              ariaLabel="Duration"
               value={durationHours}
               onChange={(value) => onDurationChange(value as DurationHours)}
               options={durationOptions.map((option) => ({
@@ -102,6 +130,7 @@ export default function OverviewFilterBar({
             />
 
             <FilterSelectField
+              ariaLabel="Date Range"
               value={dateRange}
               onChange={(value) => onDateRangeChange(value as DateRange)}
               startAdornment={<CalendarTodayRoundedIcon sx={{ fontSize: '1rem' }} />}

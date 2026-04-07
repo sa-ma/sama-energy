@@ -19,7 +19,6 @@ import {
 } from '@tanstack/react-query';
 import type {
   ForecastOverviewResponse,
-  Market,
   MarketCode,
   SummaryMetricId,
 } from '@sama-energy/contracts';
@@ -34,40 +33,18 @@ import {
   getMarkets,
 } from '@/lib/api-client';
 import { formatCurrencyValue } from '@/lib/currency-format';
+import {
+  durationHoursValues,
+  fallbackMarkets,
+  marketCodes,
+  dateRangeValues,
+} from '@/lib/dashboard-filters';
 import { dashboardQueryKeys } from '@/lib/query-keys';
 
 import ForecastChart from './forecast-chart';
 import OverviewFilterBar from './overview-filter-bar';
 import RecentSummaryTable from './recent-summary-table';
 import TrendChart from './trend-chart';
-
-const marketCodes = ['GB', 'ERCOT', 'DE'] as const;
-const durationHoursValues = [1, 2, 4] as const;
-const dateRangeValues = ['3M', '6M', '12M'] as const;
-
-const fallbackMarkets: Market[] = [
-  {
-    code: 'GB',
-    name: 'Great Britain',
-    currency: 'GBP',
-    timezone: 'Europe/London',
-    supportedDurations: [1, 2, 4],
-  },
-  {
-    code: 'ERCOT',
-    name: 'ERCOT',
-    currency: 'USD',
-    timezone: 'America/Chicago',
-    supportedDurations: [1, 2],
-  },
-  {
-    code: 'DE',
-    name: 'Germany',
-    currency: 'EUR',
-    timezone: 'Europe/Berlin',
-    supportedDurations: [1, 2, 4],
-  },
-];
 
 const metricCaptions: Record<SummaryMetricId, string> = {
   'avg-revenue': 'Monthly benchmark',
@@ -218,6 +195,7 @@ export default function OverviewDashboard() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 3, md: 4 } }}>
       <DashboardPageHeader
+        title="Market Overview"
         subtitle="Explore battery market performance, trends, and forecast signals"
       />
 
@@ -334,7 +312,7 @@ export default function OverviewDashboard() {
             title="Recent Market Summary"
             subtitle="Latest versus prior-period market indicators"
             minHeight={0}
-            bleedContentX
+            bleedContentX={{ sm: true, md: true }}
             contentGap={1.5}
             contentPadding={{ xs: 1.75, sm: 2, md: 2.25 }}
             headerSpacing={0.45}

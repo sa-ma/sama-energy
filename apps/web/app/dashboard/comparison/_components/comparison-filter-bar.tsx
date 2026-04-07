@@ -27,6 +27,18 @@ type SelectOption<T extends string | number> = {
   label: string;
 };
 
+const visuallyHidden = {
+  border: 0,
+  clip: 'rect(0 0 0 0)',
+  height: 1,
+  margin: -1,
+  overflow: 'hidden',
+  padding: 0,
+  position: 'absolute',
+  whiteSpace: 'nowrap',
+  width: 1,
+} as const;
+
 type ComparisonFilterBarProps = {
   markets: MarketCode[];
   durationHours: DurationHours;
@@ -104,7 +116,9 @@ export default function ComparisonFilterBar({
         >
           <Box>
             <FilterMultiSelectTrigger
+              ariaLabel="Markets"
               endIcon={<KeyboardArrowDownRoundedIcon />}
+              expanded={Boolean(anchorEl)}
               onClick={(event) => setAnchorEl(event.currentTarget)}
               sx={{ minWidth: { xs: '100%', md: 250 } }}
             >
@@ -224,19 +238,35 @@ export default function ComparisonFilterBar({
               ml: { md: 'auto' },
             }}
           >
-            {isUpdating ? (
-              <Stack
-                alignItems="center"
-                direction="row"
-                spacing={0.75}
-                sx={(theme) => ({ color: theme.sama.text.secondary, pr: 0.5 })}
-              >
-                <CircularProgress size={14} thickness={5} />
-                <Typography variant="body2">Updating</Typography>
-              </Stack>
-            ) : null}
+            <Box
+              sx={(theme) => ({
+                width: 18,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: theme.sama.text.secondary,
+                pr: 0.5,
+                flexShrink: 0,
+              })}
+              aria-atomic={isUpdating ? 'true' : undefined}
+              aria-live={isUpdating ? 'polite' : undefined}
+              role={isUpdating ? 'status' : undefined}
+            >
+              <CircularProgress
+                aria-hidden="true"
+                size={14}
+                thickness={5}
+                sx={{ visibility: isUpdating ? 'visible' : 'hidden' }}
+              />
+              {isUpdating ? (
+                <Box component="span" sx={visuallyHidden}>
+                  Updating…
+                </Box>
+              ) : null}
+            </Box>
 
             <FilterSegmentedControl
+              ariaLabel="Duration"
               value={durationHours}
               onChange={(value) => onDurationChange(value as DurationHours)}
               options={durationOptions.map((option) => ({
@@ -246,6 +276,7 @@ export default function ComparisonFilterBar({
             />
 
             <FilterSelectField
+              ariaLabel="Date Range"
               value={dateRange}
               onChange={(value) => onDateRangeChange(value as DateRange)}
               startAdornment={<CalendarTodayRoundedIcon sx={{ fontSize: '1rem' }} />}

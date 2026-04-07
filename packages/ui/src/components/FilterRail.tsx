@@ -18,6 +18,7 @@ type FilterRailProps = Readonly<{
 }>;
 
 type FilterSelectFieldProps = Readonly<{
+  ariaLabel: string;
   children: React.ReactNode;
   onChange: (value: string | number) => void;
   startAdornment?: React.ReactNode;
@@ -31,6 +32,7 @@ type FilterOption = {
 };
 
 type FilterSegmentedControlProps = Readonly<{
+  ariaLabel: string;
   onChange: (value: string | number) => void;
   options: readonly FilterOption[];
   value: string | number;
@@ -38,9 +40,11 @@ type FilterSegmentedControlProps = Readonly<{
 }>;
 
 type FilterMultiSelectTriggerProps = Readonly<{
+  ariaLabel: string;
   children: React.ReactNode;
   endIcon?: React.ReactNode;
   onClick: React.MouseEventHandler<HTMLElement>;
+  expanded?: boolean;
   sx?: SxProps<Theme>;
 }>;
 
@@ -91,6 +95,7 @@ export function FilterRail({
 }
 
 export function FilterSelectField({
+  ariaLabel,
   children,
   onChange,
   startAdornment,
@@ -101,6 +106,7 @@ export function FilterSelectField({
     <FormControl size="small" sx={sx}>
       <Select
         displayEmpty
+        inputProps={{ 'aria-label': ariaLabel }}
         value={value}
         onChange={(event) => onChange(event.target.value as string | number)}
         sx={{
@@ -128,6 +134,7 @@ export function FilterSelectField({
 }
 
 export function FilterSegmentedControl({
+  ariaLabel,
   onChange,
   options,
   value,
@@ -135,6 +142,7 @@ export function FilterSegmentedControl({
 }: FilterSegmentedControlProps) {
   return (
     <ToggleButtonGroup
+      aria-label={ariaLabel}
       exclusive
       size="small"
       value={value}
@@ -155,9 +163,11 @@ export function FilterSegmentedControl({
 }
 
 export function FilterMultiSelectTrigger({
+  ariaLabel,
   children,
   endIcon,
   onClick,
+  expanded = false,
   sx,
 }: FilterMultiSelectTriggerProps) {
   const baseSx = (theme: Theme) => ({
@@ -176,6 +186,10 @@ export function FilterMultiSelectTrigger({
     fontWeight: 600,
     lineHeight: 1.2,
     cursor: 'pointer',
+    '&.Mui-focusVisible': {
+      outline: `2px solid ${theme.palette.primary.main}`,
+      outlineOffset: 2,
+    },
     '& .filter-trigger-icon': {
       display: 'inline-flex',
       alignItems: 'center',
@@ -193,10 +207,13 @@ export function FilterMultiSelectTrigger({
 
   return (
     <ButtonBase
-      component="div"
+      aria-expanded={expanded}
+      aria-haspopup="menu"
+      aria-label={ariaLabel}
       disableRipple
       onClick={onClick}
       sx={composedSx}
+      type="button"
     >
       <Box sx={{ minWidth: 0, flex: 1 }}>{children}</Box>
       {endIcon ? <Box className="filter-trigger-icon">{endIcon}</Box> : null}

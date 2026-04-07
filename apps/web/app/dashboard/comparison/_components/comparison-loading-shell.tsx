@@ -11,7 +11,7 @@ export default function ComparisonLoadingShell() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 3, md: 4 } }}>
       <DashboardPageHeader
-        eyebrow="Dashboard Comparison"
+        title="Market Comparison"
         subtitle="Compare battery market performance across selected regions"
       />
 

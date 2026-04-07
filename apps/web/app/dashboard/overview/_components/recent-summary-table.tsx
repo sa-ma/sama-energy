@@ -1,6 +1,12 @@
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import type { ForecastOverviewResponse } from '@sama-energy/contracts';
 
@@ -221,72 +227,126 @@ export default function RecentSummaryTable({
         })}
       </Stack>
 
-      <Box
-        sx={(theme) => ({
-          display: { xs: 'none', sm: 'grid' },
-          gridTemplateColumns: rowGridTemplate,
-          gap: 2,
-          alignItems: 'center',
-          px: rowPaddingX,
-          py: 0.85,
-          backgroundColor: theme.sama.surface.subtle,
-          borderBottom: `1px solid ${theme.sama.border.strong}`,
-        })}
-      >
-        <Typography sx={(theme) => ({ ...headerCellStyles, color: theme.sama.text.secondary })}>Metric</Typography>
-        <Typography sx={(theme) => ({ ...headerCellStyles, color: theme.sama.text.secondary, textAlign: 'right' })}>Latest</Typography>
-        <Typography sx={(theme) => ({ ...headerCellStyles, color: theme.sama.text.secondary, textAlign: 'right' })}>Prior Period</Typography>
-        <Typography sx={(theme) => ({ ...headerCellStyles, color: theme.sama.text.secondary, textAlign: 'right' })}>Change</Typography>
-      </Box>
+      <TableContainer sx={{ display: { xs: 'none', sm: 'block' } }}>
+        <Table sx={{ tableLayout: 'fixed' }}>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ ...headerCellStyles, px: rowPaddingX, width: '36%' }}>
+                Metric
+              </TableCell>
+              <TableCell
+                align="right"
+                sx={{ ...headerCellStyles, px: rowPaddingX, width: '21%' }}
+              >
+                Latest
+              </TableCell>
+              <TableCell
+                align="right"
+                sx={{ ...headerCellStyles, px: rowPaddingX, width: '23%' }}
+              >
+                Prior Period
+              </TableCell>
+              <TableCell
+                align="right"
+                sx={{ ...headerCellStyles, px: rowPaddingX, width: '20%' }}
+              >
+                Change
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows?.map((row, index) => {
+              const change = formatChange(row.changePct);
 
-      {rows?.map((row, index) => {
-        const change = formatChange(row.changePct);
-
-        return (
-          <Box
-            key={row.metric}
-            sx={(theme) => ({
-              display: { xs: 'none', sm: 'grid' },
-              gridTemplateColumns: rowGridTemplate,
-              gap: 2,
-              alignItems: 'center',
-              px: rowPaddingX,
-              py: 0.95,
-              backgroundColor:
-                index % 2 === 0 ? theme.sama.surface.raised : theme.sama.surface.subtle,
-              borderBottom:
-                rows && index < rows.length - 1
-                  ? `1px solid ${theme.sama.border.subtle}`
-                  : 'none',
+              return (
+                <TableRow
+                  key={row.metric}
+                  sx={(theme) => ({
+                    backgroundColor:
+                      index % 2 === 0 ? theme.sama.surface.raised : theme.sama.surface.subtle,
+                    '&:last-child > th, &:last-child > td': {
+                      borderBottom: 'none',
+                    },
+                  })}
+                >
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    sx={{
+                      px: rowPaddingX,
+                      py: 1.5,
+                    }}
+                  >
+                    <Typography
+                      sx={(theme) => ({
+                        color: theme.sama.text.primary,
+                        fontSize: '0.95rem',
+                        fontWeight: 700,
+                      })}
+                    >
+                      {row.metric}
+                    </Typography>
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    sx={{
+                      px: rowPaddingX,
+                      py: 1.5,
+                      fontVariantNumeric: 'tabular-nums',
+                    }}
+                  >
+                    <Typography
+                      sx={(theme) => ({
+                        color: theme.sama.text.primary,
+                        fontWeight: 600,
+                        fontVariantNumeric: 'tabular-nums',
+                      })}
+                    >
+                      {formatSummaryValue(row.latest, row.unit === 'currency' ? currency : row.unit)}
+                    </Typography>
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    sx={{
+                      px: rowPaddingX,
+                      py: 1.5,
+                      fontVariantNumeric: 'tabular-nums',
+                    }}
+                  >
+                    <Typography
+                      sx={(theme) => ({
+                        color: theme.sama.text.secondary,
+                        fontWeight: 600,
+                        fontVariantNumeric: 'tabular-nums',
+                      })}
+                    >
+                      {formatSummaryValue(row.prior, row.unit === 'currency' ? currency : row.unit)}
+                    </Typography>
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    sx={{
+                      px: rowPaddingX,
+                      py: 1.5,
+                      fontVariantNumeric: 'tabular-nums',
+                    }}
+                  >
+                    <Typography
+                      sx={(theme) => ({
+                        color: theme.sama.status[change.tone].fg,
+                        fontWeight: 700,
+                        fontVariantNumeric: 'tabular-nums',
+                      })}
+                    >
+                      {change.label}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              );
             })}
-          >
-            <Typography
-              sx={(theme) => ({
-                color: theme.sama.text.primary,
-                fontSize: '0.95rem',
-                fontWeight: 700,
-              })}
-            >
-              {row.metric}
-            </Typography>
-            <Typography sx={(theme) => ({ color: theme.sama.text.primary, textAlign: 'right', fontWeight: 600 })}>
-              {formatSummaryValue(row.latest, row.unit === 'currency' ? currency : row.unit)}
-            </Typography>
-            <Typography sx={(theme) => ({ color: theme.sama.text.secondary, textAlign: 'right', fontWeight: 600 })}>
-              {formatSummaryValue(row.prior, row.unit === 'currency' ? currency : row.unit)}
-            </Typography>
-            <Typography
-              sx={(theme) => ({
-                color: theme.sama.status[change.tone].fg,
-                textAlign: 'right',
-                fontWeight: 700,
-              })}
-            >
-              {change.label}
-            </Typography>
-          </Box>
-        );
-      })}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Stack>
   );
 }

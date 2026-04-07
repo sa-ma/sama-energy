@@ -31,6 +31,13 @@ import {
   getComparison,
   getMarkets,
 } from '@/lib/api-client';
+import {
+  dateRangeValues,
+  defaultComparisonMarkets,
+  durationHoursValues,
+  fallbackMarkets,
+  marketCodes,
+} from '@/lib/dashboard-filters';
 import { dashboardQueryKeys } from '@/lib/query-keys';
 
 import ComparisonFilterBar from './comparison-filter-bar';
@@ -38,35 +45,6 @@ import ComparisonKpiTable from './comparison-kpi-table';
 import ComparisonLoadingShell from './comparison-loading-shell';
 import ComparisonRankingSummary from './comparison-ranking-summary';
 import ComparisonTrendChart from './comparison-trend-chart';
-
-const marketCodes = ['GB', 'ERCOT', 'DE'] as const;
-const durationHoursValues = [1, 2, 4] as const;
-const dateRangeValues = ['3M', '6M', '12M'] as const;
-const defaultMarkets: MarketCode[] = ['GB', 'ERCOT'];
-
-const fallbackMarkets: Market[] = [
-  {
-    code: 'GB',
-    name: 'Great Britain',
-    currency: 'GBP',
-    timezone: 'Europe/London',
-    supportedDurations: [1, 2, 4],
-  },
-  {
-    code: 'ERCOT',
-    name: 'ERCOT',
-    currency: 'USD',
-    timezone: 'America/Chicago',
-    supportedDurations: [1, 2],
-  },
-  {
-    code: 'DE',
-    name: 'Germany',
-    currency: 'EUR',
-    timezone: 'Europe/Berlin',
-    supportedDurations: [1, 2, 4],
-  },
-];
 
 function areSameMarkets(a: MarketCode[], b: MarketCode[]) {
   return a.length === b.length && a.every((value, index) => value === b[index]);
@@ -97,7 +75,7 @@ const marketsParser = createParser<MarketCode[]>({
     return value.join(',');
   },
   eq: areSameMarkets,
-}).withDefault(defaultMarkets);
+}).withDefault(defaultComparisonMarkets);
 
 const filterParsers = {
   markets: marketsParser,
@@ -128,7 +106,7 @@ export default function ComparisonDashboard() {
     availableMarketMap.has(marketCode),
   );
   const selectedMarketCodes =
-    effectiveMarkets.length >= 2 ? effectiveMarkets : defaultMarkets;
+    effectiveMarkets.length >= 2 ? effectiveMarkets : defaultComparisonMarkets;
   const selectedMarkets = selectedMarketCodes
     .map((marketCode) => availableMarketMap.get(marketCode))
     .filter((market): market is Market => Boolean(market));
@@ -222,7 +200,7 @@ export default function ComparisonDashboard() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 3, md: 4 } }}>
       <DashboardPageHeader
-        eyebrow="Dashboard Comparison"
+        title="Market Comparison"
         subtitle="Compare battery market performance across selected regions"
       />
 

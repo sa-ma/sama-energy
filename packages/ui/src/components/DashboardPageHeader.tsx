@@ -6,48 +6,46 @@ import Typography from '@mui/material/Typography';
 
 type DashboardPageHeaderProps = Readonly<{
   eyebrow?: string;
-  title?: string;
+  title: string;
   subtitle: string;
 }>;
 
 export function DashboardPageHeader({
-  eyebrow = 'Dashboard Overview',
+  eyebrow,
   title,
   subtitle,
 }: DashboardPageHeaderProps) {
   return (
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: { xs: 'column', md: 'row' },
-        alignItems: { xs: 'flex-start', md: 'flex-end' },
-        justifyContent: 'space-between',
-        gap: 2.5,
+        maxWidth: 960,
+        pt: { xs: 1, md: 1.5 },
       }}
     >
-      <Stack spacing={0.6} sx={{ maxWidth: 760 }}>
-        <Typography
-          variant="overline"
-          sx={{
-            color: 'text.secondary',
-          }}
-        >
-          {eyebrow}
-        </Typography>
-        {title ? (
+      <Stack spacing={0.35} sx={{ maxWidth: 820 }}>
+        {eyebrow ? (
           <Typography
-            component="h1"
-            sx={(theme) => ({
-              fontSize: { xs: '2rem', md: theme.typography.h1.fontSize },
-              fontWeight: theme.typography.h1.fontWeight,
-              lineHeight: theme.typography.h1.lineHeight,
-              letterSpacing: theme.typography.h1.letterSpacing,
-              color: theme.sama.text.primary,
-            })}
+            variant="overline"
+            sx={{
+              color: 'text.secondary',
+            }}
           >
-            {title}
+            {eyebrow}
           </Typography>
         ) : null}
+        <Typography
+          component="h1"
+          sx={(theme) => ({
+            color: theme.sama.text.primary,
+            fontSize: { xs: '1.95rem', md: '2.2rem' },
+            fontWeight: 800,
+            letterSpacing: '-0.055em',
+            lineHeight: 1.02,
+            textWrap: 'balance',
+          })}
+        >
+          {title}
+        </Typography>
         <Typography
           variant="body1"
           sx={{
@@ -60,16 +58,6 @@ export function DashboardPageHeader({
           {subtitle}
         </Typography>
       </Stack>
-
-      <Box
-        aria-hidden="true"
-        sx={{
-          display: { xs: 'none', md: 'block' },
-          flexShrink: 0,
-          width: 200,
-          minHeight: 56,
-        }}
-      />
     </Box>
   );
 }
