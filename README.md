@@ -57,6 +57,7 @@ This is where I focused most of the work. I wanted the pages to feel like real p
 - server-prefetched initial data
 - responsive refetch behaviour
 - consistent loading, empty, and error states
+- frontend tests that focus on filter logic, dashboard interactions, and smoke-level browser flows
 
 ### `apps/api`
 
@@ -158,25 +159,54 @@ pnpm dev
 pnpm build
 pnpm lint
 pnpm test
+pnpm test:e2e
 ```
 
 ## Testing
 
-The repo currently includes API tests covering:
+The repo includes both API and frontend tests.
+
+### API coverage
 
 - market metadata responses
 - overview payload shape
 - comparison payload shape
 - validation and unsupported-filter failures
 
-Frontend component and end-to-end coverage are still areas I would add next.
+### Frontend coverage
+
+- pure tests for dashboard filter parsing and normalization
+- API client tests for query serialization and error shaping
+- integration tests for the overview and comparison dashboards
+- stale-data, retry, and refetch error behaviour
+- Playwright smoke tests for routing and shareable dashboard state
+
+### Test commands
+
+From the repo root:
+
+```bash
+pnpm test
+pnpm test:e2e
+```
+
+Frontend-only:
+
+```bash
+pnpm --filter @sama-energy/web test
+pnpm --filter @sama-energy/web test:watch
+pnpm --filter @sama-energy/web test:coverage
+pnpm --filter @sama-energy/web test:e2e
+```
+
+The frontend test setup uses Vitest, React Testing Library, MSW, and Playwright. The intent is not blanket coverage. It is to protect the product behaviors most likely to regress: URL-driven filters, market/duration coercion, loading transitions, retry flows, and degraded API states.
 
 ## What I Would Build Next
 
 If I continued this project, I would:
 
 - replace deterministic fixtures with real market and forecast data sources
-- add frontend interaction and end-to-end test coverage
+- expand frontend coverage into richer accessibility and edge-case scenarios
 - profile rendering behaviour with larger datasets
 - deepen the comparison and scenario analysis flows
 - introduce saved views and more persistent workflows
