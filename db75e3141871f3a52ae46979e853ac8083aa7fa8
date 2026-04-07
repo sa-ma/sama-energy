@@ -1,0 +1,58 @@
+package.json
+  fa89726ccdb0eb64 9-10
+apps/web/lib/currency-format.test.ts
+  fa89726ccdb0eb64 1-18
+apps/web/lib/dashboard-filters.test.ts
+  fa89726ccdb0eb64 1-99
+apps/web/package.json
+  fa89726ccdb0eb64 9-13,32-35,39-40,43-47
+apps/web/playwright.config.ts
+  fa89726ccdb0eb64 1-40
+apps/web/tsconfig.json
+  fa89726ccdb0eb64 5
+apps/web/vitest.config.ts
+  fa89726ccdb0eb64 1-29
+apps/web/vitest.setup.tsx
+  fa89726ccdb0eb64 1-58
+apps/web/app/dashboard/overview/_components/overview-dashboard.test.tsx
+  fa89726ccdb0eb64 1-177
+turbo.json
+  fa89726ccdb0eb64 12-14
+apps/web/lib/api-client.test.ts
+  fa89726ccdb0eb64 1-103
+apps/web/app/dashboard/comparison/_components/comparison-dashboard.test.tsx
+  fa89726ccdb0eb64 1-181
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.5",
+  "base_commit_sha": "db75e3141871f3a52ae46979e853ac8083aa7fa8",
+  "prompts": {
+    "860b02c508786150": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019d6897-05e3-7481-9d34-06c4e3162606",
+        "model": "gpt-5.4"
+      },
+      "human_author": "Samaila Bala",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 8,
+      "accepted_lines": 0,
+      "overriden_lines": 0
+    },
+    "fa89726ccdb0eb64": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019d6868-621f-7b33-8095-1cececaba753",
+        "model": "gpt-5.4"
+      },
+      "human_author": "Samaila Bala",
+      "messages": [],
+      "total_additions": 735,
+      "total_deletions": 3,
+      "accepted_lines": 727,
+      "overriden_lines": 0
+    }
+  }
+}
