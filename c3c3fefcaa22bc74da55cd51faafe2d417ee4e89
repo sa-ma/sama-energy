@@ -1,0 +1,23 @@
+apps/web/app/dashboard/overview/_components/overview-filter-bar.tsx
+  c34283558c110c4a 1,52,59,71,76-78,95-102,107
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.5",
+  "base_commit_sha": "c3c3fefcaa22bc74da55cd51faafe2d417ee4e89",
+  "prompts": {
+    "c34283558c110c4a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019d67c8-ad7c-7b03-aaf0-366c3f1dffc9",
+        "model": "gpt-5.4"
+      },
+      "human_author": "Samaila Bala",
+      "messages": [],
+      "total_additions": 17,
+      "total_deletions": 19,
+      "accepted_lines": 17,
+      "overriden_lines": 0
+    }
+  }
+}
