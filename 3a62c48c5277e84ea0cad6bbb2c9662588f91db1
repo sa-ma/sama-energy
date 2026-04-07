@@ -1,0 +1,39 @@
+apps/web/app/dashboard/comparison/page.tsx
+  c8ced421b7b3bc2b 1-5,8-17,19-44,47,49
+apps/web/app/dashboard/comparison/_components/comparison-dashboard.tsx
+  c8ced421b7b3bc2b 34-40,78,109,203
+packages/ui/src/components/FilterRail.tsx
+  c8ced421b7b3bc2b 21,35,43,47,98,109,137,145,166,170,189-192,210-212,216
+apps/web/app/dashboard/overview/page.tsx
+  c8ced421b7b3bc2b 1-5,8-17,19-44,47,49
+apps/web/app/dashboard/overview/_components/recent-summary-table.tsx
+  c8ced421b7b3bc2b 4-9,230-259,261-345,347-349
+apps/web/app/dashboard/overview/_components/overview-dashboard.tsx
+  c8ced421b7b3bc2b 36-41,198,315
+apps/web/lib/dashboard-filters.ts
+  c8ced421b7b3bc2b 1-138
+apps/web/app/dashboard/overview/_components/overview-filter-bar.tsx
+  c8ced421b7b3bc2b 23-33,72,95-120,123,133
+apps/web/app/dashboard/comparison/_components/comparison-filter-bar.tsx
+  c8ced421b7b3bc2b 30-40,119,121,241-266,269,279
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.5",
+  "base_commit_sha": "3a62c48c5277e84ea0cad6bbb2c9662588f91db1",
+  "prompts": {
+    "c8ced421b7b3bc2b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019d6808-3af1-7fb3-be88-d2c4505b0b76",
+        "model": "gpt-5.4"
+      },
+      "human_author": "Samaila Bala",
+      "messages": [],
+      "total_additions": 522,
+      "total_deletions": 213,
+      "accepted_lines": 470,
+      "overriden_lines": 0
+    }
+  }
+}
