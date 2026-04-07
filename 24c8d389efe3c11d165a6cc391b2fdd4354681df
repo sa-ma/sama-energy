@@ -1,0 +1,55 @@
+apps/web/app/dashboard/comparison/_components/comparison-trend-chart.tsx
+  689b5b4c48d285d8 7-10,26-27,63,66,70,80-81,87,110,113-119,123-129,136,146,171,176,182,188,192,200,204
+apps/web/app/dashboard/overview/_components/overview-filter-bar.tsx
+  689b5b4c48d285d8 7-11,51-57,59,61,63,65-68,70-75,77-85,87-100,102-105,107-110,112-118,120-127
+apps/web/package.json
+  689b5b4c48d285d8 19
+apps/web/app/dashboard/comparison/_components/comparison-loading-shell.tsx
+  689b5b4c48d285d8 4-8,13,18-26,28-30
+apps/web/app/dashboard/comparison/_components/comparison-dashboard.tsx
+  689b5b4c48d285d8 10-12,224
+apps/web/app/dashboard/comparison/_components/comparison-filter-bar.tsx
+  689b5b4c48d285d8 11-16,81-87,89,91,93,95-101,103-108,111-132,134-137,139-164,166-168,170-178,180-212,214-220
+apps/web/next.config.ts
+  689b5b4c48d285d8 5
+apps/web/app/dashboard/layout.tsx
+  689b5b4c48d285d8 1,12
+apps/web/app/dashboard/comparison/_components/comparison-ranking-summary.tsx
+  689b5b4c48d285d8 50-53,55,57,60,63
+apps/web/app/dashboard/overview/_components/forecast-chart.tsx
+  689b5b4c48d285d8 7-9,21-22,51,54,58,67-68,74-76,80,114-120,124-130,137,143,155,159,165,171,175,178,182,188,192,197,201
+apps/web/app/dashboard/overview/_components/recent-summary-table.tsx
+  689b5b4c48d285d8 7-8,15-16,21,35,39-40,76-79,81,105,112-115,151-154,156,161-162,165,169-174,187-190,196-199,205-208,220,227-230,232-235,253-254,257,261,264,267-273
+apps/web/app/dashboard/overview/_components/trend-chart.tsx
+  689b5b4c48d285d8 7-9,22-23,52,55,59,68-69,78,93,96-102,106-112,131,134-140,144-150,156,162,174,179,185,192,199,204-205,207-208,212-213,219,223
+apps/web/app/layout.tsx
+  689b5b4c48d285d8 4,32,36
+apps/web/app/dashboard/overview/_components/overview-dashboard.tsx
+  689b5b4c48d285d8 11-15,36,96,110,220,273,278,289
+apps/web/app/dashboard/_components/dashboard-header.tsx
+  689b5b4c48d285d8 5,21
+apps/web/app/dashboard/overview/_components/overview-loading-shell.tsx
+  689b5b4c48d285d8 4-10,15,19-30,34-36,39,42-49,51,53,60
+apps/web/app/dashboard/comparison/_components/comparison-kpi-table.tsx
+  689b5b4c48d285d8 13-14,19,33,70,72,75,92,96,99,102-106,108
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.5",
+  "base_commit_sha": "24c8d389efe3c11d165a6cc391b2fdd4354681df",
+  "prompts": {
+    "689b5b4c48d285d8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019d6584-401a-73e3-9fed-e0db170804ea",
+        "model": "gpt-5.4"
+      },
+      "human_author": "Samaila Bala",
+      "messages": [],
+      "total_additions": 515,
+      "total_deletions": 1249,
+      "accepted_lines": 512,
+      "overriden_lines": 0
+    }
+  }
+}
