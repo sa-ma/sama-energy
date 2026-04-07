@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, type KeyboardEvent, type MouseEvent } from 'react';
+import CalendarTodayRoundedIcon from '@mui/icons-material/CalendarTodayRounded';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
@@ -53,10 +55,11 @@ export default function ComparisonFilterBar({
   onDateRangeChange,
 }: ComparisonFilterBarProps) {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const selectedMarketLabels = markets.map(
-    (marketCode) =>
+  const selectedMarkets = markets.map((marketCode) => ({
+    code: marketCode,
+    label:
       marketOptions.find((option) => option.value === marketCode)?.label ?? marketCode,
-  );
+  }));
 
   const handleToggleMarket = (marketCode: MarketCode) => {
     const isSelected = markets.includes(marketCode);
@@ -77,111 +80,146 @@ export default function ComparisonFilterBar({
     onMarketsChange([...markets, marketCode]);
   };
 
+  const handleRemoveMarket = (
+    event: MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>,
+    marketCode: MarketCode,
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (markets.length <= 2) {
+      return;
+    }
+
+    onMarketsChange(markets.filter((value) => value !== marketCode));
+  };
+
   return (
-    <FilterRail>
+    <FilterRail variant="flat">
       <Stack spacing={1.1}>
         <Stack
           direction={{ xs: 'column', md: 'row' }}
           justifyContent="space-between"
           spacing={1}
         >
-          <Stack
-            alignItems={{ xs: 'stretch', md: 'center' }}
-            direction={{ xs: 'column', md: 'row' }}
-            flexWrap="wrap"
-            spacing={1}
-            useFlexGap
-          >
-            <Box>
-              <FilterMultiSelectTrigger
-                endIcon={<KeyboardArrowDownRoundedIcon />}
-                onClick={(event) => setAnchorEl(event.currentTarget)}
-                sx={{ minWidth: { xs: '100%', md: 250 } }}
+          <Box>
+            <FilterMultiSelectTrigger
+              endIcon={<KeyboardArrowDownRoundedIcon />}
+              onClick={(event) => setAnchorEl(event.currentTarget)}
+              sx={{ minWidth: { xs: '100%', md: 250 } }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: 0.65,
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  minWidth: 0,
+                }}
               >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: 0.65,
-                    alignItems: 'center',
-                    justifyContent: 'flex-start',
-                    minWidth: 0,
-                  }}
-                >
-                  {selectedMarketLabels.map((label) => (
-                    <Box
-                      key={label}
-                      component="span"
-                      sx={(theme) => ({
-                        borderRadius: `${theme.sama.radius.sm / 2}px`,
-                        border: `1px solid ${theme.sama.border.strong}`,
-                        backgroundColor: theme.sama.surface.raised,
-                        px: 0.7,
-                        py: 0.22,
-                        color: theme.sama.text.primary,
-                        fontSize: '0.78rem',
-                        fontWeight: 700,
-                        lineHeight: 1.2,
-                        whiteSpace: 'nowrap',
-                      })}
-                    >
-                      {label}
+                {selectedMarkets.map((market) => (
+                  <Box
+                    key={market.code}
+                    component="span"
+                    sx={(theme) => ({
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 0.35,
+                      minHeight: 24,
+                      borderRadius: `${theme.sama.radius.sm / 2}px`,
+                      border: `1px solid ${theme.sama.border.strong}`,
+                      backgroundColor: theme.sama.surface.raised,
+                      px: 0.7,
+                      py: 0.22,
+                      color: theme.sama.text.primary,
+                      fontSize: '0.78rem',
+                      fontWeight: 700,
+                      lineHeight: 1.2,
+                      whiteSpace: 'nowrap',
+                    })}
+                  >
+                    <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                      {market.label}
                     </Box>
-                  ))}
-                </Box>
-              </FilterMultiSelectTrigger>
+                    {markets.length > 2 ? (
+                      <Box
+                        component="span"
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Remove ${market.label}`}
+                        onClick={(event) => handleRemoveMarket(event, market.code)}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter' || event.key === ' ') {
+                            handleRemoveMarket(event, market.code);
+                          }
+                        }}
+                        sx={(theme) => ({
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: 16,
+                          height: 16,
+                          borderRadius: `${theme.sama.radius.sm / 2}px`,
+                          color: theme.sama.text.muted,
+                          transition: 'background-color 160ms ease, color 160ms ease',
+                          '&:hover': {
+                            backgroundColor: theme.sama.surface.subtle,
+                            color: theme.sama.text.primary,
+                          },
+                        })}
+                      >
+                        <CloseRoundedIcon sx={{ fontSize: '0.9rem' }} />
+                      </Box>
+                    ) : null}
+                  </Box>
+                ))}
+              </Box>
+            </FilterMultiSelectTrigger>
 
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={() => setAnchorEl(null)}
-              >
-                {marketOptions.map((option) => {
-                  const isSelected = markets.includes(option.value);
-                  const isDisabled =
-                    (!isSelected && markets.length >= 3) ||
-                    (isSelected && markets.length <= 2);
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={() => setAnchorEl(null)}
+            >
+              {marketOptions.map((option) => {
+                const isSelected = markets.includes(option.value);
+                const isDisabled =
+                  (!isSelected && markets.length >= 3) ||
+                  (isSelected && markets.length <= 2);
 
-                  return (
-                    <MenuItem
-                      key={option.value}
-                      disabled={isDisabled}
-                      onClick={() => handleToggleMarket(option.value)}
-                      sx={{
-                        minHeight: 42,
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        gap: 1,
-                      }}
-                    >
-                      <Typography sx={{ fontSize: '0.94rem', fontWeight: 600 }}>
-                        {option.label}
-                      </Typography>
-                      <Checkbox
-                        checked={isSelected}
-                        disableRipple
-                        sx={{ p: 0 }}
-                      />
-                    </MenuItem>
-                  );
-                })}
-              </Menu>
-            </Box>
-
-            <FilterSegmentedControl
-              value={durationHours}
-              onChange={(value) => onDurationChange(value as DurationHours)}
-              options={durationOptions.map((option) => ({
-                value: option.value,
-                label: `${option.value}h`,
-              }))}
-            />
-          </Stack>
+                return (
+                  <MenuItem
+                    key={option.value}
+                    disabled={isDisabled}
+                    onClick={() => handleToggleMarket(option.value)}
+                    sx={{
+                      minHeight: 42,
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      gap: 1,
+                    }}
+                  >
+                    <Typography sx={{ fontSize: '0.94rem', fontWeight: 600 }}>
+                      {option.label}
+                    </Typography>
+                    <Checkbox
+                      checked={isSelected}
+                      disableRipple
+                      sx={{ p: 0 }}
+                    />
+                  </MenuItem>
+                );
+              })}
+            </Menu>
+          </Box>
 
           <Box
             sx={{
               display: 'flex',
-              alignItems: 'center',
+              alignItems: { xs: 'stretch', md: 'center' },
+              flexDirection: { xs: 'column', md: 'row' },
+              flexWrap: 'wrap',
               gap: 1,
               ml: { md: 'auto' },
             }}
@@ -198,9 +236,19 @@ export default function ComparisonFilterBar({
               </Stack>
             ) : null}
 
+            <FilterSegmentedControl
+              value={durationHours}
+              onChange={(value) => onDurationChange(value as DurationHours)}
+              options={durationOptions.map((option) => ({
+                value: option.value,
+                label: `${option.value}h`,
+              }))}
+            />
+
             <FilterSelectField
               value={dateRange}
               onChange={(value) => onDateRangeChange(value as DateRange)}
+              startAdornment={<CalendarTodayRoundedIcon sx={{ fontSize: '1rem' }} />}
               sx={{ minWidth: { xs: '100%', md: 170 } }}
             >
               {dateRangeOptions.map((option) => (

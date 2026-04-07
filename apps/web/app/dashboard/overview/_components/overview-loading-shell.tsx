@@ -16,7 +16,7 @@ export default function OverviewLoadingShell() {
         subtitle="Explore battery market performance, trends, and forecast signals"
       />
 
-      <FilterRail>
+      <FilterRail variant="flat">
         <Stack
           direction={{ xs: 'column', md: 'row' }}
           justifyContent="space-between"
@@ -72,17 +72,17 @@ export default function OverviewLoadingShell() {
         <SectionPanel
           title="Revenue & Price Trends"
           subtitle="Historical market performance over the selected period"
-          minHeight={360}
+          minHeight={300}
         >
-          <Skeleton sx={{ flex: 1, minHeight: 280 }} variant="rounded" />
+          <Skeleton sx={{ flex: 1, minHeight: 240 }} variant="rounded" />
         </SectionPanel>
 
         <SectionPanel
           title="Forecast Preview"
           subtitle="Base, low, and high case outlook"
-          minHeight={360}
+          minHeight={300}
         >
-          <Skeleton sx={{ flex: 1, minHeight: 280 }} variant="rounded" />
+          <Skeleton sx={{ flex: 1, minHeight: 240 }} variant="rounded" />
         </SectionPanel>
       </Box>
     </Box>

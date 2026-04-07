@@ -5,6 +5,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+import { StatusPill } from '@sama-energy/ui';
 import type {
   ComparisonResponse,
   Market,
@@ -44,12 +45,15 @@ export default function ComparisonKpiTable({
   rows,
   rankings,
 }: ComparisonKpiTableProps) {
+  const cellPaddingX = { xs: 2, sm: 2.5, md: 3 } as const;
+
   return (
     <TableContainer>
       <Table sx={{ minWidth: 560 }}>
         <TableHead>
           <TableRow>
             <TableCell
+              sx={{ px: cellPaddingX }}
             >
               Metric
             </TableCell>
@@ -57,6 +61,7 @@ export default function ComparisonKpiTable({
               <TableCell
                 key={market.code}
                 align="right"
+                sx={{ px: cellPaddingX }}
               >
                 {market.code}
               </TableCell>
@@ -64,10 +69,26 @@ export default function ComparisonKpiTable({
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.metricId}>
+          {rows.map((row, rowIndex) => (
+            <TableRow
+              key={row.metricId}
+              sx={
+                rowIndex === rows.length - 1
+                  ? {
+                      '& > th, & > td': {
+                        borderBottom: '0 !important',
+                      },
+                    }
+                  : undefined
+              }
+            >
               <TableCell
-                sx={{ py: 1.4 }}
+                sx={{
+                  px: cellPaddingX,
+                  py: 1.85,
+                  borderBottom:
+                    rowIndex === rows.length - 1 ? '0 !important' : undefined,
+                }}
               >
                 <Typography sx={(theme) => ({ color: theme.sama.text.primary, fontWeight: 700 })}>
                   {row.label}
@@ -89,25 +110,37 @@ export default function ComparisonKpiTable({
                   <TableCell
                     key={`${row.metricId}-${market.code}`}
                     align="right"
-                    sx={{ py: 1.4 }}
+                    sx={{
+                      px: cellPaddingX,
+                      py: 1.85,
+                      borderBottom:
+                        rowIndex === rows.length - 1 ? '0 !important' : undefined,
+                    }}
                   >
                     <Typography
                       component="span"
-                      sx={(theme) => ({
+                      sx={{
                         display: 'inline-flex',
                         alignItems: 'center',
-                        borderRadius: `${theme.sama.radius.pill}px`,
-                        px: isBest ? 1.15 : 0,
-                        py: isBest ? 0.55 : 0,
-                        color: isBest ? theme.sama.status.positive.fg : theme.sama.text.secondary,
-                        backgroundColor: isBest ? theme.sama.status.positive.surface : 'transparent',
-                        border: isBest
-                          ? `1px solid ${theme.sama.status.positive.border}`
-                          : '1px solid transparent',
-                        fontWeight: isBest ? 700 : 600,
-                      })}
+                        justifyContent: 'flex-end',
+                        gap: 1,
+                      }}
                     >
-                      {formatValue(value, row.unit)}
+                      <Typography
+                        component="span"
+                        sx={(theme) => ({
+                          color: theme.sama.text.secondary,
+                          fontWeight: 600,
+                          lineHeight: 1,
+                        })}
+                      >
+                        {formatValue(value, row.unit)}
+                      </Typography>
+                      {isBest ? (
+                        <StatusPill compact glow>
+                          Best
+                        </StatusPill>
+                      ) : null}
                     </Typography>
                   </TableCell>
                 );

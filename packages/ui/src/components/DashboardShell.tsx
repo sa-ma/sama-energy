@@ -19,12 +19,19 @@ export function DashboardShell({ children, header }: DashboardShellProps) {
     >
       {header ? (
         <Box
-          sx={{
-            px: { xs: 2.5, sm: 4, lg: 5 },
-            pt: { xs: 1.5, sm: 2, lg: 2.5 },
-          }}
+          sx={(theme) => ({
+            backgroundColor: theme.sama.surface.raised,
+            borderBottom: `1px solid ${theme.sama.border.strong}`,
+          })}
         >
-          {header}
+          <Box
+            sx={{
+              px: { xs: 2.5, sm: 4, lg: 5 },
+              py: { xs: 1.25, sm: 1.5, lg: 1.75 },
+            }}
+          >
+            {header}
+          </Box>
         </Box>
       ) : null}
 

@@ -11,6 +11,7 @@ type SectionPanelProps = Readonly<{
   subtitle?: string;
   minHeight?: number;
   contentPadding?: { xs: number; sm: number; md: number };
+  bleedContentX?: boolean;
   headerSpacing?: number;
   contentGap?: number;
 }>;
@@ -21,6 +22,7 @@ export function SectionPanel({
   subtitle,
   minHeight = 320,
   contentPadding = { xs: 2, sm: 2.5, md: 3 },
+  bleedContentX = false,
   headerSpacing = 0.75,
   contentGap = 2.5,
 }: SectionPanelProps) {
@@ -65,7 +67,23 @@ export function SectionPanel({
           ) : null}
         </Stack>
 
-        <Stack sx={{ flex: 1, minHeight }}>{children}</Stack>
+        <Stack
+          sx={{
+            flex: 1,
+            minHeight,
+            ...(bleedContentX
+              ? {
+                  mx: {
+                    xs: -contentPadding.xs,
+                    sm: -contentPadding.sm,
+                    md: -contentPadding.md,
+                  },
+                }
+              : null),
+          }}
+        >
+          {children}
+        </Stack>
       </CardContent>
     </Card>
   );

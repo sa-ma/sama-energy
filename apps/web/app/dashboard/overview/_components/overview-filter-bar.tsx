@@ -1,3 +1,4 @@
+import CalendarTodayRoundedIcon from '@mui/icons-material/CalendarTodayRounded';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -48,20 +49,14 @@ export default function OverviewFilterBar({
   onDateRangeChange,
 }: OverviewFilterBarProps) {
   return (
-    <FilterRail>
+    <FilterRail variant="flat">
       <Stack spacing={1.1}>
         <Stack
           direction={{ xs: 'column', md: 'row' }}
           justifyContent="space-between"
           spacing={1.25}
         >
-          <Stack
-            alignItems={{ xs: 'stretch', md: 'center' }}
-            direction={{ xs: 'column', md: 'row' }}
-            flexWrap="wrap"
-            spacing={1.25}
-            useFlexGap
-          >
+          <Box>
             <FilterSelectField
               value={market}
               onChange={(value) => onMarketChange(value as MarketCode)}
@@ -73,21 +68,14 @@ export default function OverviewFilterBar({
                 </MenuItem>
               ))}
             </FilterSelectField>
-
-            <FilterSegmentedControl
-              value={durationHours}
-              onChange={(value) => onDurationChange(value as DurationHours)}
-              options={durationOptions.map((option) => ({
-                value: option.value,
-                label: `${option.value}h`,
-              }))}
-            />
-          </Stack>
+          </Box>
 
           <Box
             sx={{
               display: 'flex',
-              alignItems: 'center',
+              alignItems: { xs: 'stretch', md: 'center' },
+              flexDirection: { xs: 'column', md: 'row' },
+              flexWrap: 'wrap',
               gap: 1,
               ml: { md: 'auto' },
             }}
@@ -104,9 +92,19 @@ export default function OverviewFilterBar({
               </Stack>
             ) : null}
 
+            <FilterSegmentedControl
+              value={durationHours}
+              onChange={(value) => onDurationChange(value as DurationHours)}
+              options={durationOptions.map((option) => ({
+                value: option.value,
+                label: `${option.value}h`,
+              }))}
+            />
+
             <FilterSelectField
               value={dateRange}
               onChange={(value) => onDateRangeChange(value as DateRange)}
+              startAdornment={<CalendarTodayRoundedIcon sx={{ fontSize: '1rem' }} />}
               sx={{ minWidth: { xs: '100%', md: 170 } }}
             >
               {dateRangeOptions.map((option) => (

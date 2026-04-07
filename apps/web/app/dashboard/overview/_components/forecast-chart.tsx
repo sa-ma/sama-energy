@@ -151,7 +151,7 @@ export default function ForecastChart({ currency, data }: ForecastChartProps) {
       }}
     >
       <ResponsiveContainer height={chartHeight} width="100%">
-        <LineChart data={data} margin={{ top: 8, right: 8, left: -16, bottom: 8 }}>
+        <LineChart data={data} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
           <CartesianGrid stroke={chartTheme.gridStroke} vertical={false} />
           <XAxis
             axisLine={false}

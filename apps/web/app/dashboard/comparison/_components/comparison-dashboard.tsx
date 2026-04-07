@@ -278,6 +278,7 @@ export default function ComparisonDashboard() {
             title="KPI Comparison"
             subtitle="Core market indicators aligned to the same duration and time range"
             minHeight={0}
+            bleedContentX
           >
             {comparisonQuery.data ? (
               <ComparisonKpiTable
@@ -291,7 +292,7 @@ export default function ComparisonDashboard() {
           <SectionPanel
             title="Revenue Trend"
             subtitle="Normalized revenue performance over time"
-            minHeight={360}
+            minHeight={320}
           >
             {comparisonQuery.data ? (
               <ComparisonTrendChart

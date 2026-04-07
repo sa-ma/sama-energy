@@ -15,6 +15,7 @@ export {
 export { MetricTile } from './components/MetricTile';
 export { MetricTileGrid } from './components/MetricTileGrid';
 export { SectionPanel } from './components/SectionPanel';
+export { StatusPill } from './components/StatusPill';
 export { SamaThemeProvider } from './theme/SamaThemeProvider';
 export { createSamaTheme } from './theme/create-sama-theme';
 export { samaTokens, type SamaThemeTokens } from './theme/tokens';

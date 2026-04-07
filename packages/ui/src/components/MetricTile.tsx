@@ -1,7 +1,7 @@
 'use client';
 
-import ArrowDownwardRounded from '@mui/icons-material/ArrowDownwardRounded';
-import ArrowUpwardRounded from '@mui/icons-material/ArrowUpwardRounded';
+import TrendingDownRounded from '@mui/icons-material/TrendingDownRounded';
+import TrendingUpRounded from '@mui/icons-material/TrendingUpRounded';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
@@ -27,13 +27,16 @@ export function MetricTile({
   tone = 'positive',
   sx,
 }: MetricTileProps) {
-  const StatusIcon =
-    tone === 'negative' ? ArrowDownwardRounded : ArrowUpwardRounded;
+  const StatusIcon = tone === 'negative' ? TrendingDownRounded : TrendingUpRounded;
   const baseSx = (theme: Theme) => ({
     minWidth: 0,
+    height: '100%',
     px: { xs: 2.5, sm: 3 },
     py: { xs: 2.5, sm: 3 },
     backgroundColor: theme.sama.surface.raised,
+    borderRadius: `${theme.sama.radius.lg}px`,
+    border: `1px solid ${theme.sama.border.strong}`,
+    boxShadow: theme.sama.elevation.floating,
   });
   const composedSx = sx
     ? [baseSx, ...(Array.isArray(sx) ? [...sx] : [sx])]
@@ -44,15 +47,56 @@ export function MetricTile({
       sx={composedSx}
     >
       <Stack spacing={1.1}>
-        <Typography
-          sx={(theme) => ({
-            color: theme.sama.text.primary,
-            fontSize: '0.98rem',
-            fontWeight: 650,
-          })}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 1.25,
+            minWidth: 0,
+          }}
         >
-          {label}
-        </Typography>
+          {loading ? (
+            <Skeleton height={26} variant="text" width="38%" />
+          ) : (
+            <Typography
+              sx={(theme) => ({
+                color: theme.sama.text.primary,
+                fontSize: '0.98rem',
+                fontWeight: 650,
+              })}
+            >
+              {label}
+            </Typography>
+          )}
+
+          {loading ? (
+            <Skeleton height={32} variant="rounded" width={82} />
+          ) : change ? (
+            <Box
+              sx={(theme) => ({
+                display: 'inline-flex',
+                flexShrink: 0,
+                alignItems: 'center',
+                gap: 0.45,
+                px: 1,
+                py: 0.42,
+                borderRadius: `${theme.sama.radius.pill}px`,
+                backgroundColor: theme.sama.status[tone].surface,
+                border: `1px solid ${theme.sama.status[tone].border}`,
+                color: theme.sama.status[tone].fg,
+                fontSize: '0.82rem',
+                fontWeight: 700,
+                letterSpacing: '-0.01em',
+              })}
+            >
+              <StatusIcon sx={{ fontSize: '0.92rem' }} />
+              <Box component="span">{change}</Box>
+            </Box>
+          ) : (
+            <Box />
+          )}
+        </Box>
 
         <Box
           sx={{
@@ -79,29 +123,6 @@ export function MetricTile({
               {value}
             </Typography>
           )}
-
-          {loading ? (
-            <Skeleton height={32} variant="rounded" width={82} />
-          ) : change ? (
-            <Box
-              sx={(theme) => ({
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 0.75,
-                px: 1.2,
-                py: 0.6,
-                borderRadius: `${theme.sama.radius.pill}px`,
-                backgroundColor: theme.sama.status[tone].surface,
-                border: `1px solid ${theme.sama.status[tone].border}`,
-                color: theme.sama.status[tone].fg,
-                fontSize: '0.9rem',
-                fontWeight: 600,
-              })}
-            >
-              <StatusIcon sx={{ fontSize: '0.95rem' }} />
-              <Box component="span">{change}</Box>
-            </Box>
-          ) : null}
         </Box>
 
         <Typography

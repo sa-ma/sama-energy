@@ -59,6 +59,7 @@ export default function RecentSummaryTable({
   } as const;
 
   const rowGridTemplate = 'minmax(180px, 1.4fr) minmax(100px, 1fr) minmax(110px, 1fr) minmax(90px, 0.9fr)';
+  const rowPaddingX = { xs: 1.75, sm: 2, md: 2.25 } as const;
   const mobileValueLabelStyles = {
     fontSize: '0.76rem',
     fontWeight: 800,
@@ -107,9 +108,8 @@ export default function RecentSummaryTable({
             gridTemplateColumns: rowGridTemplate,
             gap: 2,
             alignItems: 'center',
-            px: 1,
+            px: rowPaddingX,
             py: 0.85,
-            borderRadius: `${theme.sama.radius.sm}px`,
             backgroundColor: theme.sama.surface.subtle,
             borderBottom: `1px solid ${theme.sama.border.strong}`,
           })}
@@ -121,13 +121,18 @@ export default function RecentSummaryTable({
         {Array.from({ length: 4 }, (_, index) => (
           <Box
             key={`summary-row-${index + 1}`}
-            sx={{
+            sx={(theme) => ({
               display: { xs: 'none', sm: 'grid' },
               gridTemplateColumns: rowGridTemplate,
               gap: 2,
               alignItems: 'center',
+              px: rowPaddingX,
               py: 0.95,
-            }}
+              backgroundColor:
+                index % 2 === 0 ? theme.sama.surface.raised : theme.sama.surface.subtle,
+              borderBottom:
+                index < 3 ? `1px solid ${theme.sama.border.subtle}` : 'none',
+            })}
           >
             <Skeleton height={18} width="72%" />
             <Skeleton height={18} width="68%" />
@@ -222,9 +227,8 @@ export default function RecentSummaryTable({
           gridTemplateColumns: rowGridTemplate,
           gap: 2,
           alignItems: 'center',
-          px: 1,
+          px: rowPaddingX,
           py: 0.85,
-          borderRadius: `${theme.sama.radius.sm}px`,
           backgroundColor: theme.sama.surface.subtle,
           borderBottom: `1px solid ${theme.sama.border.strong}`,
         })}
@@ -235,19 +239,26 @@ export default function RecentSummaryTable({
         <Typography sx={(theme) => ({ ...headerCellStyles, color: theme.sama.text.secondary, textAlign: 'right' })}>Change</Typography>
       </Box>
 
-      {rows?.map((row) => {
+      {rows?.map((row, index) => {
         const change = formatChange(row.changePct);
 
         return (
           <Box
             key={row.metric}
-            sx={{
+            sx={(theme) => ({
               display: { xs: 'none', sm: 'grid' },
               gridTemplateColumns: rowGridTemplate,
               gap: 2,
               alignItems: 'center',
+              px: rowPaddingX,
               py: 0.95,
-            }}
+              backgroundColor:
+                index % 2 === 0 ? theme.sama.surface.raised : theme.sama.surface.subtle,
+              borderBottom:
+                rows && index < rows.length - 1
+                  ? `1px solid ${theme.sama.border.subtle}`
+                  : 'none',
+            })}
           >
             <Typography
               sx={(theme) => ({

@@ -57,10 +57,10 @@ export type SamaThemeTokens = {
 
 export const samaTokens: SamaThemeTokens = {
   surface: {
-    canvas: '#f3f5f7',
-    subtle: '#f6f8fb',
+    canvas: '#f5f5f3',
+    subtle: '#fafaf8',
     raised: 'rgba(255, 255, 255, 0.96)',
-    overlay: 'rgba(255, 255, 255, 0.98)',
+    overlay: 'rgba(250, 250, 248, 0.98)',
   },
   border: {
     subtle: 'rgba(226, 232, 240, 0.95)',

@@ -302,7 +302,7 @@ export default function OverviewDashboard() {
             <SectionPanel
               title="Revenue & Price Trends"
               subtitle="Historical market performance over the selected period"
-              minHeight={360}
+              minHeight={300}
             >
               {isInitialLoading ? (
                 <ChartSkeleton />
@@ -317,7 +317,7 @@ export default function OverviewDashboard() {
             <SectionPanel
               title="Forecast Preview"
               subtitle="Base, low, and high case outlook"
-              minHeight={360}
+              minHeight={300}
             >
               {isInitialLoading ? (
                 <ChartSkeleton />
@@ -334,6 +334,7 @@ export default function OverviewDashboard() {
             title="Recent Market Summary"
             subtitle="Latest versus prior-period market indicators"
             minHeight={0}
+            bleedContentX
             contentGap={1.5}
             contentPadding={{ xs: 1.75, sm: 2, md: 2.25 }}
             headerSpacing={0.45}

@@ -29,15 +29,15 @@ export function DashboardNav({
         flexDirection: { xs: 'column', sm: 'row' },
         alignItems: { xs: 'stretch', sm: 'center' },
         justifyContent: 'space-between',
-        gap: 2,
-        minHeight: 32,
+        gap: 1.25,
+        minHeight: 40,
       }}
     >
       <Typography
         component="div"
         sx={(theme) => ({
           color: theme.sama.text.primary,
-          fontSize: '0.95rem',
+          fontSize: '0.9rem',
           fontWeight: 800,
           letterSpacing: '0.16em',
           lineHeight: 1,
@@ -51,11 +51,10 @@ export function DashboardNav({
         spacing={0.75}
         sx={(theme) => ({
           alignSelf: { xs: 'stretch', sm: 'auto' },
-          borderRadius: `${theme.sama.radius.md}px`,
+          borderRadius: `${theme.sama.radius.pill}px`,
           border: `1px solid ${theme.sama.border.strong}`,
-          backgroundColor: 'rgba(255, 255, 255, 0.72)',
-          boxShadow: theme.sama.elevation.nav,
-          p: 0.45,
+          backgroundColor: theme.sama.surface.subtle,
+          p: 0.35,
           overflowX: 'auto',
         })}
       >
@@ -69,16 +68,15 @@ export function DashboardNav({
               href={link.href}
               sx={(theme) => ({
                 flex: { xs: 1, sm: '0 0 auto' },
-                borderRadius: `${theme.sama.radius.sm}px`,
-                px: 1.45,
-                py: 0.78,
+                borderRadius: `${theme.sama.radius.pill}px`,
+                px: 1.2,
+                py: 0.62,
                 textAlign: 'center',
                 color: isActive ? theme.sama.text.primary : theme.sama.text.muted,
                 backgroundColor: isActive ? theme.sama.surface.raised : 'transparent',
-                border: '1px solid',
-                borderColor: isActive ? theme.sama.border.strong : 'rgba(203, 213, 225, 0.36)',
-                boxShadow: isActive ? theme.sama.elevation.active : 'none',
-                fontSize: '0.86rem',
+                border: '1px solid transparent',
+                boxShadow: isActive ? '0 1px 2px rgba(15, 23, 42, 0.06)' : 'none',
+                fontSize: '0.84rem',
                 fontWeight: 700,
                 lineHeight: 1,
                 transition:
@@ -87,8 +85,7 @@ export function DashboardNav({
                   color: theme.sama.text.primary,
                   backgroundColor: isActive
                     ? theme.sama.surface.overlay
-                    : 'rgba(255, 255, 255, 0.52)',
-                  borderColor: 'rgba(203, 213, 225, 0.58)',
+                    : 'rgba(255, 255, 255, 0.6)',
                 },
               })}
             >

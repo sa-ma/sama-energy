@@ -149,7 +149,11 @@ export function createSamaTheme(options: ThemeOptions = {}) {
             borderRadius: theme.sama.radius.md,
             backgroundColor: theme.sama.surface.raised,
             boxShadow: theme.sama.elevation.subtle,
+            '& legend': {
+              display: 'none',
+            },
             '& .MuiOutlinedInput-notchedOutline': {
+              top: 0,
               borderColor: theme.sama.border.strong,
             },
             '&:hover .MuiOutlinedInput-notchedOutline': {

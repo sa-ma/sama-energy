@@ -15,17 +15,17 @@ export default function ComparisonLoadingShell() {
         subtitle="Compare battery market performance across selected regions"
       />
 
-      <FilterRail>
+      <FilterRail variant="flat">
         <Stack
           direction={{ xs: 'column', md: 'row' }}
           justifyContent="space-between"
           spacing={1.25}
         >
-          <Stack direction={{ xs: 'column', md: 'row' }} spacing={1.25}>
-            <Skeleton height={42} sx={{ borderRadius: 3, width: { xs: '100%', md: 260 } }} variant="rounded" />
+          <Skeleton height={42} sx={{ borderRadius: 3, width: { xs: '100%', md: 260 } }} variant="rounded" />
+          <Stack direction={{ xs: 'column', md: 'row' }} spacing={1.25} sx={{ ml: { md: 'auto' } }}>
             <Skeleton height={42} sx={{ borderRadius: 3, width: { xs: '100%', md: 210 } }} variant="rounded" />
+            <Skeleton height={42} sx={{ borderRadius: 3, width: { xs: '100%', md: 170 } }} variant="rounded" />
           </Stack>
-          <Skeleton height={42} sx={{ borderRadius: 3, width: { xs: '100%', md: 170 } }} variant="rounded" />
         </Stack>
       </FilterRail>
 
@@ -40,9 +40,9 @@ export default function ComparisonLoadingShell() {
       <SectionPanel
         title="Revenue Trend"
         subtitle="Revenue performance across the selected period"
-        minHeight={360}
+        minHeight={320}
       >
-        <Skeleton sx={{ flex: 1, minHeight: 280 }} variant="rounded" />
+        <Skeleton sx={{ flex: 1, minHeight: 250 }} variant="rounded" />
       </SectionPanel>
 
       <SectionPanel

@@ -170,7 +170,7 @@ export default function TrendChart({ currency, data }: TrendChartProps) {
       }}
     >
       <ResponsiveContainer height={chartHeight} width="100%">
-        <ComposedChart data={data} margin={{ top: 8, right: 12, left: -12, bottom: 8 }}>
+        <ComposedChart data={data} margin={{ top: 8, right: 12, left: -12, bottom: 0 }}>
           <CartesianGrid stroke={chartTheme.gridStroke} vertical={false} />
           <XAxis
             axisLine={false}
