@@ -3,11 +3,13 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 type OverviewHeaderProps = {
+  eyebrow?: string;
   title?: string;
   subtitle: string;
 };
 
 export default function OverviewHeader({
+  eyebrow = 'Dashboard Overview',
   title,
   subtitle,
 }: OverviewHeaderProps) {
@@ -29,7 +31,7 @@ export default function OverviewHeader({
             letterSpacing: '0.14em',
           }}
         >
-          Dashboard Overview
+          {eyebrow}
         </Typography>
         {title ? (
           <Typography

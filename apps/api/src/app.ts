@@ -3,6 +3,7 @@ import cors from '@fastify/cors';
 
 import { getConfig } from './lib/config.js';
 import { AppError } from './lib/errors.js';
+import comparisonRoutes from './routes/comparison/index.js';
 import forecastRoutes from './routes/forecast/index.js';
 import marketsRoutes from './routes/markets/index.js';
 
@@ -58,6 +59,7 @@ export async function createApp(
   });
 
   await app.register(marketsRoutes);
+  await app.register(comparisonRoutes);
   await app.register(forecastRoutes, { prefix: '/forecast' });
 
   return app;

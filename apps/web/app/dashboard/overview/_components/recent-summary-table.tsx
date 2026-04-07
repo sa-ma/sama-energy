@@ -64,13 +64,52 @@ export default function RecentSummaryTable({
   } as const;
 
   const rowGridTemplate = 'minmax(180px, 1.4fr) minmax(100px, 1fr) minmax(110px, 1fr) minmax(90px, 0.9fr)';
+  const mobileValueLabelStyles = {
+    color: '#64748b',
+    fontSize: '0.76rem',
+    fontWeight: 800,
+    letterSpacing: '0.04em',
+    textTransform: 'uppercase',
+  } as const;
 
   if (loading) {
     return (
       <Stack spacing={0}>
+        <Stack spacing={1.25} sx={{ display: { xs: 'flex', sm: 'none' } }}>
+          {Array.from({ length: 4 }, (_, index) => (
+            <Box
+              key={`summary-mobile-row-${index + 1}`}
+              sx={{
+                borderRadius: 2.5,
+                border: '1px solid rgba(226, 232, 240, 0.95)',
+                backgroundColor: 'rgba(248, 250, 252, 0.7)',
+                p: 1.5,
+              }}
+            >
+              <Stack spacing={1.25}>
+                <Skeleton height={20} width="52%" />
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+                    gap: 1.25,
+                  }}
+                >
+                  {Array.from({ length: 3 }, (_, valueIndex) => (
+                    <Stack key={`summary-mobile-cell-${index + 1}-${valueIndex + 1}`} spacing={0.5}>
+                      <Skeleton height={12} width="52%" />
+                      <Skeleton height={18} width="74%" />
+                    </Stack>
+                  ))}
+                </Box>
+              </Stack>
+            </Box>
+          ))}
+        </Stack>
+
         <Box
           sx={{
-            display: 'grid',
+            display: { xs: 'none', sm: 'grid' },
             gridTemplateColumns: rowGridTemplate,
             gap: 2,
             alignItems: 'center',
@@ -89,7 +128,7 @@ export default function RecentSummaryTable({
           <Box
             key={`summary-row-${index + 1}`}
             sx={{
-              display: 'grid',
+              display: { xs: 'none', sm: 'grid' },
               gridTemplateColumns: rowGridTemplate,
               gap: 2,
               alignItems: 'center',
@@ -108,9 +147,73 @@ export default function RecentSummaryTable({
 
   return (
     <Stack spacing={0}>
+      <Stack spacing={1.25} sx={{ display: { xs: 'flex', sm: 'none' } }}>
+        {rows?.map((row) => {
+          const change = formatChange(row.changePct);
+
+          return (
+            <Box
+              key={`${row.metric}-mobile`}
+              sx={{
+                borderRadius: 2.5,
+                border: '1px solid rgba(226, 232, 240, 0.95)',
+                backgroundColor: 'rgba(248, 250, 252, 0.72)',
+                p: 1.5,
+              }}
+            >
+              <Stack spacing={1.25}>
+                <Box>
+                  <Typography
+                    sx={{
+                      color: '#0f172a',
+                      fontSize: '0.95rem',
+                      fontWeight: 700,
+                    }}
+                  >
+                    {row.metric}
+                  </Typography>
+                  <Typography sx={{ color: '#64748b', fontSize: '0.82rem' }}>
+                    {row.unit}
+                  </Typography>
+                </Box>
+
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+                    gap: 1.25,
+                  }}
+                >
+                  <Stack spacing={0.35}>
+                    <Typography sx={mobileValueLabelStyles}>Latest</Typography>
+                    <Typography sx={{ color: '#0f172a', fontWeight: 600 }}>
+                      {formatSummaryValue(row.latest, row.unit === 'currency' ? currency : row.unit)}
+                    </Typography>
+                  </Stack>
+
+                  <Stack spacing={0.35}>
+                    <Typography sx={mobileValueLabelStyles}>Prior Period</Typography>
+                    <Typography sx={{ color: '#334155', fontWeight: 600 }}>
+                      {formatSummaryValue(row.prior, row.unit === 'currency' ? currency : row.unit)}
+                    </Typography>
+                  </Stack>
+
+                  <Stack spacing={0.35}>
+                    <Typography sx={mobileValueLabelStyles}>Change</Typography>
+                    <Typography sx={{ color: change.tone, fontWeight: 700 }}>
+                      {change.label}
+                    </Typography>
+                  </Stack>
+                </Box>
+              </Stack>
+            </Box>
+          );
+        })}
+      </Stack>
+
       <Box
         sx={{
-          display: 'grid',
+          display: { xs: 'none', sm: 'grid' },
           gridTemplateColumns: rowGridTemplate,
           gap: 2,
           alignItems: 'center',
@@ -134,7 +237,7 @@ export default function RecentSummaryTable({
           <Box
             key={row.metric}
             sx={{
-              display: 'grid',
+              display: { xs: 'none', sm: 'grid' },
               gridTemplateColumns: rowGridTemplate,
               gap: 2,
               alignItems: 'center',

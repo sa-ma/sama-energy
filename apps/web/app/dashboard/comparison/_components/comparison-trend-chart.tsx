@@ -1,8 +1,13 @@
 'use client';
 
+import { useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import type {
+  ComparisonResponse,
+  Market,
+} from '@sama-energy/contracts';
 import {
   CartesianGrid,
   Legend,
@@ -14,31 +19,40 @@ import {
   YAxis,
 } from 'recharts';
 
-type ForecastChartProps = {
+type ComparisonTrendChartProps = {
+  markets: Market[];
+  series: ComparisonResponse['chartSeries'];
   currency: string;
-  data: Array<{
-    date: string;
-    base: number;
-    low: number;
-    high: number;
-  }>;
 };
 
-type ForecastTooltipProps = {
+type TooltipPayloadEntry = {
+  color?: string;
+  dataKey?: string | number;
+  value?: number | string;
+};
+
+type RevenueTooltipProps = {
   active?: boolean;
   label?: string | number;
+  payload?: TooltipPayloadEntry[];
   currency: string;
-  payload?: Array<{
-    dataKey?: string | number;
-    value?: number | string;
-  }>;
+  markets: Market[];
 };
 
+const seriesColors = ['#2563eb', '#dc2626', '#16a34a'] as const;
+
 function formatMonth(date: string) {
+  const [year, month] = date.split('-').map(Number);
+
+  if (!year || !month) {
+    return date;
+  }
+
   return new Intl.DateTimeFormat('en-GB', {
     month: 'short',
     year: '2-digit',
-  }).format(new Date(date));
+    timeZone: 'UTC',
+  }).format(new Date(Date.UTC(year, month - 1, 1)));
 }
 
 function formatCompactCurrency(value: number, currency: string) {
@@ -58,26 +72,21 @@ function formatCurrency(value: number, currency: string) {
   }).format(value);
 }
 
-function ForecastTooltip({
+function RevenueTooltip({
   active,
-  payload,
   label,
+  payload,
   currency,
-}: ForecastTooltipProps) {
+  markets,
+}: RevenueTooltipProps) {
   if (!active || !payload?.length) {
     return null;
   }
 
-  const orderedSeries = [
-    { key: 'base', label: 'Base Case', color: '#2563eb', dashed: false },
-    { key: 'high', label: 'High Case', color: '#16a34a', dashed: false },
-    { key: 'low', label: 'Low Case', color: '#dc2626', dashed: true },
-  ] as const;
-
   return (
     <Box
       sx={{
-        minWidth: 196,
+        minWidth: 220,
         borderRadius: 3,
         border: '1px solid rgba(203, 213, 225, 0.92)',
         backgroundColor: 'rgba(255, 255, 255, 0.98)',
@@ -97,9 +106,9 @@ function ForecastTooltip({
         {formatMonth(String(label))}
       </Typography>
 
-      <Stack spacing={0.95}>
-        {orderedSeries.map((series) => {
-          const entry = payload.find((item) => item.dataKey === series.key);
+      <Stack spacing={0.9}>
+        {markets.map((market) => {
+          const entry = payload.find((item) => item.dataKey === market.code);
 
           if (!entry) {
             return null;
@@ -107,7 +116,7 @@ function ForecastTooltip({
 
           return (
             <Stack
-              key={series.key}
+              key={market.code}
               alignItems="center"
               direction="row"
               justifyContent="space-between"
@@ -117,21 +126,13 @@ function ForecastTooltip({
                 <Box
                   sx={{
                     width: 10,
-                    height: 3,
+                    height: 10,
                     borderRadius: 999,
-                    backgroundColor: series.color,
-                    ...(series.dashed
-                      ? {
-                          backgroundImage:
-                            'repeating-linear-gradient(90deg, currentColor 0 5px, transparent 5px 8px)',
-                          backgroundColor: 'transparent',
-                          color: series.color,
-                        }
-                      : null),
+                    backgroundColor: entry.color ?? '#163759',
                   }}
                 />
                 <Typography sx={{ color: '#475569', fontSize: '0.85rem', fontWeight: 500 }}>
-                  {series.label}
+                  {market.name}
                 </Typography>
               </Stack>
               <Typography sx={{ color: '#0f172a', fontSize: '0.9rem', fontWeight: 700 }}>
@@ -145,8 +146,25 @@ function ForecastTooltip({
   );
 }
 
-export default function ForecastChart({ currency, data }: ForecastChartProps) {
-  const chartHeight = 300;
+export default function ComparisonTrendChart({
+  markets,
+  series,
+  currency,
+}: ComparisonTrendChartProps) {
+  const chartHeight = 320;
+  const chartData = useMemo(() => {
+    const rows = new Map<string, Record<string, number | string>>();
+
+    series.forEach((entry) => {
+      entry.points.forEach((point) => {
+        const current = rows.get(point.date) ?? { date: point.date };
+        current[entry.market] = point.value;
+        rows.set(point.date, current);
+      });
+    });
+
+    return Array.from(rows.values());
+  }, [series]);
 
   return (
     <Box
@@ -157,11 +175,12 @@ export default function ForecastChart({ currency, data }: ForecastChartProps) {
       }}
     >
       <ResponsiveContainer height={chartHeight} width="100%">
-        <LineChart data={data} margin={{ top: 8, right: 8, left: -16, bottom: 8 }}>
+        <LineChart data={chartData} margin={{ top: 8, right: 16, left: -12, bottom: 8 }}>
           <CartesianGrid stroke="rgba(148, 163, 184, 0.24)" vertical={false} />
           <XAxis
             axisLine={false}
             dataKey="date"
+            minTickGap={28}
             tick={{ fill: '#475569', fontSize: 12, fontWeight: 500 }}
             tickFormatter={formatMonth}
             tickLine={false}
@@ -173,63 +192,36 @@ export default function ForecastChart({ currency, data }: ForecastChartProps) {
             tickLine={false}
           />
           <Tooltip
-            content={<ForecastTooltip currency={currency} />}
+            content={<RevenueTooltip currency={currency} markets={markets} />}
             cursor={{
               stroke: 'rgba(15, 23, 42, 0.12)',
-              strokeWidth: 1,
+              strokeDasharray: '4 4',
             }}
           />
           <Legend
-            iconSize={10}
-            wrapperStyle={{
-              fontSize: '12px',
-              color: '#475569',
-              paddingTop: 12,
-            }}
+            formatter={(_, entry) => (
+              <Typography component="span" sx={{ color: '#334155', fontSize: '0.84rem', fontWeight: 600 }}>
+                {entry.value}
+              </Typography>
+            )}
           />
-          <Line
-            activeDot={{
-              fill: '#dc2626',
-              r: 4,
-              stroke: '#ffffff',
-              strokeWidth: 2,
-            }}
-            dataKey="low"
-            dot={false}
-            name="Low Case"
-            stroke="#dc2626"
-            strokeDasharray="4 4"
-            strokeWidth={2}
-            type="monotone"
-          />
-          <Line
-            activeDot={{
-              fill: '#2563eb',
-              r: 5,
-              stroke: '#ffffff',
-              strokeWidth: 2,
-            }}
-            dataKey="base"
-            dot={false}
-            name="Base Case"
-            stroke="#2563eb"
-            strokeWidth={3.2}
-            type="monotone"
-          />
-          <Line
-            activeDot={{
-              fill: '#16a34a',
-              r: 4,
-              stroke: '#ffffff',
-              strokeWidth: 2,
-            }}
-            dataKey="high"
-            dot={false}
-            name="High Case"
-            stroke="#16a34a"
-            strokeWidth={2}
-            type="monotone"
-          />
+          {series.map((entry, index) => (
+            <Line
+              key={entry.market}
+              activeDot={{
+                fill: seriesColors[index],
+                r: 4,
+                stroke: '#ffffff',
+                strokeWidth: 2,
+              }}
+              dataKey={entry.market}
+              dot={false}
+              name={entry.label}
+              stroke={seriesColors[index]}
+              strokeWidth={3}
+              type="monotone"
+            />
+          ))}
         </LineChart>
       </ResponsiveContainer>
     </Box>

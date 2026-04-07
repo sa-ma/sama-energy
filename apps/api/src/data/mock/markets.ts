@@ -15,4 +15,11 @@ export const markets: Market[] = [
     timezone: 'America/Chicago',
     supportedDurations: [1, 2],
   },
+  {
+    code: 'DE',
+    name: 'Germany',
+    currency: 'EUR',
+    timezone: 'Europe/Berlin',
+    supportedDurations: [1, 2, 4],
+  },
 ];

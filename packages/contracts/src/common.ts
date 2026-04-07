@@ -3,6 +3,7 @@ import { Type, type Static } from '@sinclair/typebox';
 export const MarketCodeSchema = Type.Union([
   Type.Literal('GB'),
   Type.Literal('ERCOT'),
+  Type.Literal('DE'),
 ]);
 
 export type MarketCode = Static<typeof MarketCodeSchema>;

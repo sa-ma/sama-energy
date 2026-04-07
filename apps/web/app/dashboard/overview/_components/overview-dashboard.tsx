@@ -37,7 +37,7 @@ import RecentSummaryTable from './recent-summary-table';
 import SectionPanel from './section-panel';
 import TrendChart from './trend-chart';
 
-const marketCodes = ['GB', 'ERCOT'] as const;
+const marketCodes = ['GB', 'ERCOT', 'DE'] as const;
 const durationHoursValues = [1, 2, 4] as const;
 const dateRangeValues = ['3M', '6M', '12M'] as const;
 const summaryBorderColor = 'rgba(203, 213, 225, 0.98)';
@@ -56,6 +56,13 @@ const fallbackMarkets: Market[] = [
     currency: 'USD',
     timezone: 'America/Chicago',
     supportedDurations: [1, 2],
+  },
+  {
+    code: 'DE',
+    name: 'Germany',
+    currency: 'EUR',
+    timezone: 'Europe/Berlin',
+    supportedDurations: [1, 2, 4],
   },
 ];
 

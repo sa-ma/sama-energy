@@ -10,6 +10,11 @@ import Stack from '@mui/material/Stack';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Typography from '@mui/material/Typography';
+import type {
+  DateRange,
+  DurationHours,
+  MarketCode,
+} from '@sama-energy/contracts';
 
 type SelectOption<T extends string | number> = {
   value: T;
@@ -25,9 +30,9 @@ type OverviewFilterBarProps = {
   dateRangeOptions: ReadonlyArray<SelectOption<string>>;
   isUpdating?: boolean;
   helperMessage?: string;
-  onMarketChange: (value: 'GB' | 'ERCOT') => void;
-  onDurationChange: (value: 1 | 2 | 4) => void;
-  onDateRangeChange: (value: '3M' | '6M' | '12M') => void;
+  onMarketChange: (value: MarketCode) => void;
+  onDurationChange: (value: DurationHours) => void;
+  onDateRangeChange: (value: DateRange) => void;
 };
 
 const railStyles = {
@@ -85,7 +90,7 @@ export default function OverviewFilterBar({
                 <Select
                   displayEmpty
                   value={market}
-                  onChange={(event) => onMarketChange(event.target.value as 'GB' | 'ERCOT')}
+                  onChange={(event) => onMarketChange(event.target.value as MarketCode)}
                   sx={fieldStyles}
                 >
                   {marketOptions.map((option) => (
@@ -102,7 +107,7 @@ export default function OverviewFilterBar({
                 value={durationHours}
                 onChange={(_, value) => {
                   if (value !== null) {
-                    onDurationChange(value as 1 | 2 | 4);
+                    onDurationChange(value as DurationHours);
                   }
                 }}
                 sx={{
@@ -168,9 +173,7 @@ export default function OverviewFilterBar({
                 <Select
                   displayEmpty
                   value={dateRange}
-                  onChange={(event) =>
-                    onDateRangeChange(event.target.value as '3M' | '6M' | '12M')
-                  }
+                  onChange={(event) => onDateRangeChange(event.target.value as DateRange)}
                   sx={fieldStyles}
                 >
                   {dateRangeOptions.map((option) => (

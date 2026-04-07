@@ -109,7 +109,7 @@ function TrendTooltip({
                   width: 10,
                   height: 10,
                   borderRadius: 0.75,
-                  backgroundColor: '#8aa3bb',
+                  backgroundColor: '#3b82f6',
                 }}
               />
               <Typography sx={{ color: '#475569', fontSize: '0.85rem', fontWeight: 500 }}>
@@ -135,7 +135,7 @@ function TrendTooltip({
                   width: 10,
                   height: 3,
                   borderRadius: 999,
-                  backgroundColor: '#163759',
+                  backgroundColor: '#2563eb',
                 }}
               />
               <Typography sx={{ color: '#475569', fontSize: '0.85rem', fontWeight: 500 }}>
@@ -153,9 +153,17 @@ function TrendTooltip({
 }
 
 export default function TrendChart({ currency, data }: TrendChartProps) {
+  const chartHeight = 300;
+
   return (
-    <Box sx={{ height: 1, minHeight: 280 }}>
-      <ResponsiveContainer height="100%" width="100%">
+    <Box
+      sx={{
+        width: 1,
+        minWidth: 0,
+        height: chartHeight,
+      }}
+    >
+      <ResponsiveContainer height={chartHeight} width="100%">
         <ComposedChart data={data} margin={{ top: 8, right: 12, left: -12, bottom: 8 }}>
           <CartesianGrid stroke="rgba(148, 163, 184, 0.24)" vertical={false} />
           <XAxis
@@ -190,15 +198,15 @@ export default function TrendChart({ currency, data }: TrendChartProps) {
           <Bar
             activeBar={
               <Rectangle
-                fill="#7b95ad"
+                fill="#60a5fa"
                 fillOpacity={0.96}
                 radius={[2, 2, 0, 0]}
-                stroke="rgba(22, 55, 89, 0.15)"
+                stroke="rgba(37, 99, 235, 0.18)"
                 strokeWidth={1}
               />
             }
             dataKey="revenue"
-            fill="#8aa3bb"
+            fill="#93c5fd"
             fillOpacity={0.88}
             maxBarSize={28}
             name="Revenue"
@@ -206,7 +214,7 @@ export default function TrendChart({ currency, data }: TrendChartProps) {
           />
           <Line
             activeDot={{
-              fill: '#163759',
+              fill: '#2563eb',
               r: 4,
               stroke: '#ffffff',
               strokeWidth: 2,
@@ -214,7 +222,7 @@ export default function TrendChart({ currency, data }: TrendChartProps) {
             dataKey="priceSpread"
             dot={false}
             name="Price Spread"
-            stroke="#163759"
+            stroke="#2563eb"
             strokeWidth={3}
             type="monotone"
             yAxisId="spread"

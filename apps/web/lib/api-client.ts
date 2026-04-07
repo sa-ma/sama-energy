@@ -1,5 +1,7 @@
 import type {
   ApiError,
+  ComparisonRequest,
+  ComparisonResponse,
   ForecastOverviewQuery,
   ForecastOverviewResponse,
   MarketsResponse,
@@ -66,6 +68,14 @@ async function requestJson<T>(path: string, searchParams?: Record<string, string
 
 export function getMarkets() {
   return requestJson<MarketsResponse>('/markets');
+}
+
+export function getComparison(query: ComparisonRequest) {
+  return requestJson<ComparisonResponse>('/comparison', {
+    markets: query.markets.join(','),
+    durationHours: query.durationHours,
+    dateRange: query.dateRange,
+  });
 }
 
 export function getForecastOverview(query: ForecastOverviewQuery) {
