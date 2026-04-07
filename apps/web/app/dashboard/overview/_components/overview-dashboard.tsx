@@ -8,6 +8,12 @@ import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import {
+  DashboardPageHeader,
+  MetricTile,
+  MetricTileGrid,
+  SectionPanel,
+} from '@sama-energy/ui';
+import {
   keepPreviousData,
   useQuery,
 } from '@tanstack/react-query';
@@ -27,20 +33,17 @@ import {
   getForecastOverview,
   getMarkets,
 } from '@/lib/api-client';
+import { formatCurrencyValue } from '@/lib/currency-format';
 import { dashboardQueryKeys } from '@/lib/query-keys';
 
 import ForecastChart from './forecast-chart';
-import MetricCard from './metric-card';
 import OverviewFilterBar from './overview-filter-bar';
-import OverviewHeader from './overview-header';
 import RecentSummaryTable from './recent-summary-table';
-import SectionPanel from './section-panel';
 import TrendChart from './trend-chart';
 
 const marketCodes = ['GB', 'ERCOT', 'DE'] as const;
 const durationHoursValues = [1, 2, 4] as const;
 const dateRangeValues = ['3M', '6M', '12M'] as const;
-const summaryBorderColor = 'rgba(203, 213, 225, 0.98)';
 
 const fallbackMarkets: Market[] = [
   {
@@ -90,11 +93,7 @@ function formatMetricValue(metric: ForecastOverviewResponse['summaryMetrics'][nu
   if (metric.unit.endsWith('/month')) {
     const currency = metric.unit.replace('/month', '');
 
-    return new Intl.NumberFormat('en-GB', {
-      style: 'currency',
-      currency,
-      maximumFractionDigits: 0,
-    }).format(metric.value);
+    return formatCurrencyValue(metric.value, currency);
   }
 
   if (metric.unit === '%') {
@@ -108,11 +107,7 @@ function formatMetricValue(metric: ForecastOverviewResponse['summaryMetrics'][nu
     }).format(metric.value);
   }
 
-  return new Intl.NumberFormat('en-GB', {
-    style: 'currency',
-    currency: metric.unit,
-    maximumFractionDigits: 0,
-  }).format(metric.value);
+  return formatCurrencyValue(metric.value, metric.unit);
 }
 
 function formatChangePct(changePct: number) {
@@ -222,7 +217,7 @@ export default function OverviewDashboard() {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 3, md: 4 } }}>
-      <OverviewHeader
+      <DashboardPageHeader
         subtitle="Explore battery market performance, trends, and forecast signals"
       />
 
@@ -275,60 +270,23 @@ export default function OverviewDashboard() {
         </SectionPanel>
       ) : (
         <>
-          <Box
-            sx={{
-              display: 'grid',
-              overflow: 'hidden',
-              borderRadius: 3,
-              border: '1px solid',
-              borderColor: summaryBorderColor,
-              backgroundColor: 'rgba(255, 255, 255, 0.96)',
-              gridTemplateColumns: {
-                xs: '1fr',
-                sm: 'repeat(2, minmax(0, 1fr))',
-                xl: 'repeat(4, minmax(0, 1fr))',
-              },
-            }}
-          >
+          <MetricTileGrid>
             {metricOrder.map((metricId) => {
               const metric = metricsById.get(metricId);
-              const metricIndex = metricOrder.indexOf(metricId);
 
               return (
-                <MetricCard
+                <MetricTile
                   key={metricId}
                   caption={metricCaptions[metricId]}
                   change={metric ? formatChangePct(metric.changePct) : undefined}
                   label={metric?.label ?? 'Loading'}
                   loading={isInitialLoading}
-                  sx={{
-                    borderRight: {
-                      xs: 'none',
-                      sm:
-                        metricIndex % 2 === 0
-                          ? `1px solid ${summaryBorderColor}`
-                          : 'none',
-                      xl:
-                        metricIndex < metricOrder.length - 1
-                          ? `1px solid ${summaryBorderColor}`
-                          : 'none',
-                    },
-                    borderBottom: {
-                      xs:
-                        metricIndex < metricOrder.length - 1
-                          ? `1px solid ${summaryBorderColor}`
-                          : 'none',
-                      sm:
-                        metricIndex < 2 ? `1px solid ${summaryBorderColor}` : 'none',
-                      xl: 'none',
-                    },
-                  }}
                   tone={metric && metric.changePct < 0 ? 'negative' : 'positive'}
                   value={metric ? formatMetricValue(metric) : undefined}
                 />
               );
             })}
-          </Box>
+          </MetricTileGrid>
 
           <Box
             sx={{

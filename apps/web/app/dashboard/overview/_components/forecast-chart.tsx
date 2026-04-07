@@ -4,6 +4,10 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import {
+  ChartTooltipSurface,
+  useSamaChartTheme,
+} from '@sama-energy/ui';
+import {
   CartesianGrid,
   Legend,
   Line,
@@ -13,6 +17,8 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
+import { formatCurrencyValue } from '@/lib/currency-format';
 
 type ForecastChartProps = {
   currency: string;
@@ -42,20 +48,14 @@ function formatMonth(date: string) {
 }
 
 function formatCompactCurrency(value: number, currency: string) {
-  return new Intl.NumberFormat('en-GB', {
+  return formatCurrencyValue(value, currency, {
     notation: 'compact',
     maximumFractionDigits: 1,
-    style: 'currency',
-    currency,
-  }).format(value);
+  });
 }
 
 function formatCurrency(value: number, currency: string) {
-  return new Intl.NumberFormat('en-GB', {
-    style: 'currency',
-    currency,
-    maximumFractionDigits: 0,
-  }).format(value);
+  return formatCurrencyValue(value, currency);
 }
 
 function ForecastTooltip({
@@ -64,39 +64,20 @@ function ForecastTooltip({
   label,
   currency,
 }: ForecastTooltipProps) {
+  const chartTheme = useSamaChartTheme();
+
   if (!active || !payload?.length) {
     return null;
   }
 
   const orderedSeries = [
-    { key: 'base', label: 'Base Case', color: '#2563eb', dashed: false },
-    { key: 'high', label: 'High Case', color: '#16a34a', dashed: false },
-    { key: 'low', label: 'Low Case', color: '#dc2626', dashed: true },
+    { key: 'base', label: 'Base Case', color: chartTheme.series[0], dashed: false },
+    { key: 'high', label: 'High Case', color: chartTheme.series[2], dashed: false },
+    { key: 'low', label: 'Low Case', color: chartTheme.series[1], dashed: true },
   ] as const;
 
   return (
-    <Box
-      sx={{
-        minWidth: 196,
-        borderRadius: 3,
-        border: '1px solid rgba(203, 213, 225, 0.92)',
-        backgroundColor: 'rgba(255, 255, 255, 0.98)',
-        boxShadow: '0 18px 40px rgba(15, 23, 42, 0.1)',
-        px: 1.75,
-        py: 1.5,
-      }}
-    >
-      <Typography
-        sx={{
-          color: '#0f172a',
-          fontSize: '0.9rem',
-          fontWeight: 700,
-          mb: 1.1,
-        }}
-      >
-        {formatMonth(String(label))}
-      </Typography>
-
+    <ChartTooltipSurface title={formatMonth(String(label))}>
       <Stack spacing={0.95}>
         {orderedSeries.map((series) => {
           const entry = payload.find((item) => item.dataKey === series.key);
@@ -130,23 +111,36 @@ function ForecastTooltip({
                       : null),
                   }}
                 />
-                <Typography sx={{ color: '#475569', fontSize: '0.85rem', fontWeight: 500 }}>
+                <Typography
+                  sx={(theme) => ({
+                    color: theme.sama.chart.axisText,
+                    fontSize: '0.85rem',
+                    fontWeight: 500,
+                  })}
+                >
                   {series.label}
                 </Typography>
               </Stack>
-              <Typography sx={{ color: '#0f172a', fontSize: '0.9rem', fontWeight: 700 }}>
+              <Typography
+                sx={(theme) => ({
+                  color: theme.sama.text.primary,
+                  fontSize: '0.9rem',
+                  fontWeight: 700,
+                })}
+              >
                 {formatCurrency(Number(entry.value), currency)}
               </Typography>
             </Stack>
           );
         })}
       </Stack>
-    </Box>
+    </ChartTooltipSurface>
   );
 }
 
 export default function ForecastChart({ currency, data }: ForecastChartProps) {
   const chartHeight = 300;
+  const chartTheme = useSamaChartTheme();
 
   return (
     <Box
@@ -158,75 +152,53 @@ export default function ForecastChart({ currency, data }: ForecastChartProps) {
     >
       <ResponsiveContainer height={chartHeight} width="100%">
         <LineChart data={data} margin={{ top: 8, right: 8, left: -16, bottom: 8 }}>
-          <CartesianGrid stroke="rgba(148, 163, 184, 0.24)" vertical={false} />
+          <CartesianGrid stroke={chartTheme.gridStroke} vertical={false} />
           <XAxis
             axisLine={false}
             dataKey="date"
-            tick={{ fill: '#475569', fontSize: 12, fontWeight: 500 }}
+            tick={chartTheme.axisTick}
             tickFormatter={formatMonth}
             tickLine={false}
           />
           <YAxis
             axisLine={false}
-            tick={{ fill: '#475569', fontSize: 12, fontWeight: 500 }}
+            tick={chartTheme.axisTick}
             tickFormatter={(value: number) => formatCompactCurrency(value, currency)}
             tickLine={false}
           />
           <Tooltip
             content={<ForecastTooltip currency={currency} />}
-            cursor={{
-              stroke: 'rgba(15, 23, 42, 0.12)',
-              strokeWidth: 1,
-            }}
+            cursor={chartTheme.cursorLine}
           />
           <Legend
             iconSize={10}
-            wrapperStyle={{
-              fontSize: '12px',
-              color: '#475569',
-              paddingTop: 12,
-            }}
+            wrapperStyle={{ ...chartTheme.legendText, paddingTop: 12 }}
           />
           <Line
-            activeDot={{
-              fill: '#dc2626',
-              r: 4,
-              stroke: '#ffffff',
-              strokeWidth: 2,
-            }}
+            activeDot={chartTheme.activeDot(chartTheme.series[1])}
             dataKey="low"
             dot={false}
             name="Low Case"
-            stroke="#dc2626"
+            stroke={chartTheme.series[1]}
             strokeDasharray="4 4"
             strokeWidth={2}
             type="monotone"
           />
           <Line
-            activeDot={{
-              fill: '#2563eb',
-              r: 5,
-              stroke: '#ffffff',
-              strokeWidth: 2,
-            }}
+            activeDot={chartTheme.activeDot(chartTheme.series[0], 5)}
             dataKey="base"
             dot={false}
             name="Base Case"
-            stroke="#2563eb"
+            stroke={chartTheme.series[0]}
             strokeWidth={3.2}
             type="monotone"
           />
           <Line
-            activeDot={{
-              fill: '#16a34a',
-              r: 4,
-              stroke: '#ffffff',
-              strokeWidth: 2,
-            }}
+            activeDot={chartTheme.activeDot(chartTheme.series[2])}
             dataKey="high"
             dot={false}
             name="High Case"
-            stroke="#16a34a"
+            stroke={chartTheme.series[2]}
             strokeWidth={2}
             type="monotone"
           />

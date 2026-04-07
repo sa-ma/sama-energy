@@ -1,3 +1,5 @@
+'use client';
+
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
@@ -13,7 +15,7 @@ type SectionPanelProps = Readonly<{
   contentGap?: number;
 }>;
 
-export default function SectionPanel({
+export function SectionPanel({
   children,
   title,
   subtitle,
@@ -24,14 +26,10 @@ export default function SectionPanel({
 }: SectionPanelProps) {
   return (
     <Card
-      sx={{
+      sx={(theme) => ({
         height: 1,
-        borderRadius: 3,
-        border: '1px solid',
-        borderColor: 'rgba(203, 213, 225, 0.98)',
-        boxShadow: 'none',
-        backgroundColor: 'rgba(255, 255, 255, 0.94)',
-      }}
+        border: `1px solid ${theme.sama.border.strong}`,
+      })}
     >
       <CardContent
         sx={{
@@ -46,16 +44,22 @@ export default function SectionPanel({
         <Stack spacing={headerSpacing}>
           <Typography
             component="h2"
-            sx={{
-              fontSize: { xs: '1.1rem', sm: '1.22rem' },
-              fontWeight: 700,
-              color: '#0f172a',
-            }}
+            sx={(theme) => ({
+              fontSize: { xs: '1.1rem', sm: theme.typography.h2.fontSize },
+              fontWeight: theme.typography.h2.fontWeight,
+              color: theme.sama.text.primary,
+            })}
           >
             {title}
           </Typography>
           {subtitle ? (
-            <Typography variant="body2" sx={{ color: '#4b5563', lineHeight: 1.4 }}>
+            <Typography
+              variant="body2"
+              sx={(theme) => ({
+                color: theme.sama.text.secondary,
+                lineHeight: 1.4,
+              })}
+            >
               {subtitle}
             </Typography>
           ) : null}

@@ -1,3 +1,5 @@
+'use client';
+
 import ArrowDownwardRounded from '@mui/icons-material/ArrowDownwardRounded';
 import ArrowUpwardRounded from '@mui/icons-material/ArrowUpwardRounded';
 import Box from '@mui/material/Box';
@@ -6,9 +8,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import type { SxProps, Theme } from '@mui/material/styles';
 
-const sharedBorderColor = 'rgba(203, 213, 225, 0.98)';
-
-type MetricCardProps = {
+type MetricTileProps = Readonly<{
   label: string;
   value?: string;
   caption: string;
@@ -16,9 +16,9 @@ type MetricCardProps = {
   loading?: boolean;
   tone?: 'positive' | 'negative';
   sx?: SxProps<Theme>;
-};
+}>;
 
-export default function MetricCard({
+export function MetricTile({
   label,
   value,
   caption,
@@ -26,28 +26,30 @@ export default function MetricCard({
   loading = false,
   tone = 'positive',
   sx,
-}: MetricCardProps) {
+}: MetricTileProps) {
   const StatusIcon =
     tone === 'negative' ? ArrowDownwardRounded : ArrowUpwardRounded;
+  const baseSx = (theme: Theme) => ({
+    minWidth: 0,
+    px: { xs: 2.5, sm: 3 },
+    py: { xs: 2.5, sm: 3 },
+    backgroundColor: theme.sama.surface.raised,
+  });
+  const composedSx = sx
+    ? [baseSx, ...(Array.isArray(sx) ? [...sx] : [sx])]
+    : baseSx;
 
   return (
     <Box
-      sx={{
-        minWidth: 0,
-        px: { xs: 2.5, sm: 3 },
-        py: { xs: 2.5, sm: 3 },
-        backgroundColor: 'rgba(255, 255, 255, 0.96)',
-        borderColor: sharedBorderColor,
-        ...sx,
-      }}
+      sx={composedSx}
     >
       <Stack spacing={1.1}>
         <Typography
-          sx={{
-            color: '#0f172a',
+          sx={(theme) => ({
+            color: theme.sama.text.primary,
             fontSize: '0.98rem',
             fontWeight: 650,
-          }}
+          })}
         >
           {label}
         </Typography>
@@ -66,13 +68,13 @@ export default function MetricCard({
           ) : (
             <Typography
               component="div"
-              sx={{
+              sx={(theme) => ({
                 fontSize: { xs: '2.05rem', sm: '2.2rem' },
                 fontWeight: 800,
                 letterSpacing: '-0.05em',
                 lineHeight: 1.05,
-                color: '#0f172a',
-              }}
+                color: theme.sama.text.primary,
+              })}
             >
               {value}
             </Typography>
@@ -82,21 +84,19 @@ export default function MetricCard({
             <Skeleton height={32} variant="rounded" width={82} />
           ) : change ? (
             <Box
-              sx={{
+              sx={(theme) => ({
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 0.75,
                 px: 1.2,
                 py: 0.6,
-                borderRadius: 999,
-                backgroundColor:
-                  tone === 'negative'
-                    ? 'rgba(254, 242, 242, 0.86)'
-                    : 'rgba(240, 253, 244, 0.9)',
-                color: tone === 'negative' ? '#b45309' : '#2f855a',
+                borderRadius: `${theme.sama.radius.pill}px`,
+                backgroundColor: theme.sama.status[tone].surface,
+                border: `1px solid ${theme.sama.status[tone].border}`,
+                color: theme.sama.status[tone].fg,
                 fontSize: '0.9rem',
                 fontWeight: 600,
-              }}
+              })}
             >
               <StatusIcon sx={{ fontSize: '0.95rem' }} />
               <Box component="span">{change}</Box>
@@ -106,10 +106,10 @@ export default function MetricCard({
 
         <Typography
           variant="body2"
-          sx={{
-            color: '#4b5563',
+          sx={(theme) => ({
+            color: theme.sama.text.secondary,
             fontSize: '0.92rem',
-          }}
+          })}
         >
           {caption}
         </Typography>

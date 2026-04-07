@@ -4,6 +4,10 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import {
+  ChartTooltipSurface,
+  useSamaChartTheme,
+} from '@sama-energy/ui';
+import {
   Bar,
   CartesianGrid,
   ComposedChart,
@@ -14,6 +18,8 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
+import { formatCurrencyValue } from '@/lib/currency-format';
 
 type TrendChartProps = {
   currency: string;
@@ -43,20 +49,14 @@ function formatMonth(date: string) {
 }
 
 function formatCompactCurrency(value: number, currency: string) {
-  return new Intl.NumberFormat('en-GB', {
+  return formatCurrencyValue(value, currency, {
     notation: 'compact',
     maximumFractionDigits: 1,
-    style: 'currency',
-    currency,
-  }).format(value);
+  });
 }
 
 function formatCurrency(value: number, currency: string) {
-  return new Intl.NumberFormat('en-GB', {
-    style: 'currency',
-    currency,
-    maximumFractionDigits: 0,
-  }).format(value);
+  return formatCurrencyValue(value, currency);
 }
 
 function TrendTooltip({
@@ -65,6 +65,8 @@ function TrendTooltip({
   label,
   currency,
 }: TrendTooltipProps) {
+  const chartTheme = useSamaChartTheme();
+
   if (!active || !payload?.length) {
     return null;
   }
@@ -73,28 +75,7 @@ function TrendTooltip({
   const spreadEntry = payload.find((entry) => entry.dataKey === 'priceSpread');
 
   return (
-    <Box
-      sx={{
-        minWidth: 196,
-        borderRadius: 3,
-        border: '1px solid rgba(203, 213, 225, 0.92)',
-        backgroundColor: 'rgba(255, 255, 255, 0.98)',
-        boxShadow: '0 18px 40px rgba(15, 23, 42, 0.1)',
-        px: 1.75,
-        py: 1.5,
-      }}
-    >
-      <Typography
-        sx={{
-          color: '#0f172a',
-          fontSize: '0.9rem',
-          fontWeight: 700,
-          mb: 1.1,
-        }}
-      >
-        {formatMonth(String(label))}
-      </Typography>
-
+    <ChartTooltipSurface title={formatMonth(String(label))}>
       <Stack spacing={0.95}>
         {revenueEntry ? (
           <Stack
@@ -109,14 +90,26 @@ function TrendTooltip({
                   width: 10,
                   height: 10,
                   borderRadius: 0.75,
-                  backgroundColor: '#3b82f6',
+                  backgroundColor: chartTheme.revenueBarActive.fill,
                 }}
               />
-              <Typography sx={{ color: '#475569', fontSize: '0.85rem', fontWeight: 500 }}>
+              <Typography
+                sx={(theme) => ({
+                  color: theme.sama.chart.axisText,
+                  fontSize: '0.85rem',
+                  fontWeight: 500,
+                })}
+              >
                 Revenue
               </Typography>
             </Stack>
-            <Typography sx={{ color: '#0f172a', fontSize: '0.9rem', fontWeight: 700 }}>
+            <Typography
+              sx={(theme) => ({
+                color: theme.sama.text.primary,
+                fontSize: '0.9rem',
+                fontWeight: 700,
+              })}
+            >
               {formatCurrency(Number(revenueEntry.value), currency)}
             </Typography>
           </Stack>
@@ -135,25 +128,38 @@ function TrendTooltip({
                   width: 10,
                   height: 3,
                   borderRadius: 999,
-                  backgroundColor: '#2563eb',
+                  backgroundColor: chartTheme.series[0],
                 }}
               />
-              <Typography sx={{ color: '#475569', fontSize: '0.85rem', fontWeight: 500 }}>
+              <Typography
+                sx={(theme) => ({
+                  color: theme.sama.chart.axisText,
+                  fontSize: '0.85rem',
+                  fontWeight: 500,
+                })}
+              >
                 Price Spread
               </Typography>
             </Stack>
-            <Typography sx={{ color: '#0f172a', fontSize: '0.9rem', fontWeight: 700 }}>
+            <Typography
+              sx={(theme) => ({
+                color: theme.sama.text.primary,
+                fontSize: '0.9rem',
+                fontWeight: 700,
+              })}
+            >
               {formatCurrency(Number(spreadEntry.value), currency)}
             </Typography>
           </Stack>
         ) : null}
       </Stack>
-    </Box>
+    </ChartTooltipSurface>
   );
 }
 
 export default function TrendChart({ currency, data }: TrendChartProps) {
   const chartHeight = 300;
+  const chartTheme = useSamaChartTheme();
 
   return (
     <Box
@@ -165,64 +171,56 @@ export default function TrendChart({ currency, data }: TrendChartProps) {
     >
       <ResponsiveContainer height={chartHeight} width="100%">
         <ComposedChart data={data} margin={{ top: 8, right: 12, left: -12, bottom: 8 }}>
-          <CartesianGrid stroke="rgba(148, 163, 184, 0.24)" vertical={false} />
+          <CartesianGrid stroke={chartTheme.gridStroke} vertical={false} />
           <XAxis
             axisLine={false}
             dataKey="date"
             minTickGap={28}
-            tick={{ fill: '#475569', fontSize: 12, fontWeight: 500 }}
+            tick={chartTheme.axisTick}
             tickFormatter={formatMonth}
             tickLine={false}
           />
           <YAxis
             axisLine={false}
-            tick={{ fill: '#475569', fontSize: 12, fontWeight: 500 }}
+            tick={chartTheme.axisTick}
             tickFormatter={(value: number) => formatCompactCurrency(value, currency)}
             tickLine={false}
           />
           <YAxis
             axisLine={false}
             orientation="right"
-            tick={{ fill: '#475569', fontSize: 12, fontWeight: 500 }}
+            tick={chartTheme.axisTick}
             tickFormatter={(value: number) => formatCurrency(value, currency)}
             tickLine={false}
             yAxisId="spread"
           />
           <Tooltip
             content={<TrendTooltip currency={currency} />}
-            cursor={{
-              fill: 'rgba(15, 23, 42, 0.04)',
-              radius: 6,
-            }}
+            cursor={chartTheme.cursorFill}
           />
           <Bar
             activeBar={
               <Rectangle
-                fill="#60a5fa"
-                fillOpacity={0.96}
+                fill={chartTheme.revenueBarActive.fill}
+                fillOpacity={chartTheme.revenueBarActive.fillOpacity}
                 radius={[2, 2, 0, 0]}
-                stroke="rgba(37, 99, 235, 0.18)"
-                strokeWidth={1}
+                stroke={chartTheme.revenueBarActive.stroke}
+                strokeWidth={chartTheme.revenueBarActive.strokeWidth}
               />
             }
             dataKey="revenue"
-            fill="#93c5fd"
-            fillOpacity={0.88}
+            fill={chartTheme.revenueBar.fill}
+            fillOpacity={chartTheme.revenueBar.fillOpacity}
             maxBarSize={28}
             name="Revenue"
             radius={[2, 2, 0, 0]}
           />
           <Line
-            activeDot={{
-              fill: '#2563eb',
-              r: 4,
-              stroke: '#ffffff',
-              strokeWidth: 2,
-            }}
+            activeDot={chartTheme.activeDot(chartTheme.series[0])}
             dataKey="priceSpread"
             dot={false}
             name="Price Spread"
-            stroke="#2563eb"
+            stroke={chartTheme.series[0]}
             strokeWidth={3}
             type="monotone"
             yAxisId="spread"

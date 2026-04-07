@@ -4,21 +4,21 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import type { ForecastOverviewResponse } from '@sama-energy/contracts';
 
+import { formatCurrencyValue } from '@/lib/currency-format';
+
 type RecentSummaryTableProps = {
   rows?: ForecastOverviewResponse['recentSummary'];
   currency: string;
   loading?: boolean;
 };
 
+type SummaryChangeTone = 'positive' | 'negative' | 'info';
+
 function formatSummaryValue(value: number, unit: string) {
   if (unit.endsWith('/month')) {
     const currency = unit.replace('/month', '');
 
-    return new Intl.NumberFormat('en-GB', {
-      style: 'currency',
-      currency,
-      maximumFractionDigits: 0,
-    }).format(value);
+    return formatCurrencyValue(value, currency);
   }
 
   if (unit === '%') {
@@ -32,16 +32,12 @@ function formatSummaryValue(value: number, unit: string) {
     }).format(value);
   }
 
-  return new Intl.NumberFormat('en-GB', {
-    style: 'currency',
-    currency: unit,
-    maximumFractionDigits: 0,
-  }).format(value);
+  return formatCurrencyValue(value, unit);
 }
 
 function formatChange(changePct: number) {
-  const tone =
-    changePct > 0 ? '#15803d' : changePct < 0 ? '#b91c1c' : '#475569';
+  const tone: SummaryChangeTone =
+    changePct > 0 ? 'positive' : changePct < 0 ? 'negative' : 'info';
   const sign = changePct > 0 ? '+' : changePct < 0 ? '' : '';
 
   return {
@@ -56,7 +52,6 @@ export default function RecentSummaryTable({
   loading = false,
 }: RecentSummaryTableProps) {
   const headerCellStyles = {
-    color: '#334155',
     fontSize: '0.78rem',
     fontWeight: 800,
     letterSpacing: '0.04em',
@@ -65,7 +60,6 @@ export default function RecentSummaryTable({
 
   const rowGridTemplate = 'minmax(180px, 1.4fr) minmax(100px, 1fr) minmax(110px, 1fr) minmax(90px, 0.9fr)';
   const mobileValueLabelStyles = {
-    color: '#64748b',
     fontSize: '0.76rem',
     fontWeight: 800,
     letterSpacing: '0.04em',
@@ -79,12 +73,12 @@ export default function RecentSummaryTable({
           {Array.from({ length: 4 }, (_, index) => (
             <Box
               key={`summary-mobile-row-${index + 1}`}
-              sx={{
-                borderRadius: 2.5,
-                border: '1px solid rgba(226, 232, 240, 0.95)',
-                backgroundColor: 'rgba(248, 250, 252, 0.7)',
+              sx={(theme) => ({
+                borderRadius: `${theme.sama.radius.md}px`,
+                border: `1px solid ${theme.sama.border.subtle}`,
+                backgroundColor: theme.sama.surface.subtle,
                 p: 1.5,
-              }}
+              })}
             >
               <Stack spacing={1.25}>
                 <Skeleton height={20} width="52%" />
@@ -108,17 +102,17 @@ export default function RecentSummaryTable({
         </Stack>
 
         <Box
-          sx={{
+          sx={(theme) => ({
             display: { xs: 'none', sm: 'grid' },
             gridTemplateColumns: rowGridTemplate,
             gap: 2,
             alignItems: 'center',
             px: 1,
             py: 0.85,
-            borderRadius: 2,
-            backgroundColor: 'rgba(248, 250, 252, 0.95)',
-            borderBottom: '1px solid rgba(203, 213, 225, 0.98)',
-          }}
+            borderRadius: `${theme.sama.radius.sm}px`,
+            backgroundColor: theme.sama.surface.subtle,
+            borderBottom: `1px solid ${theme.sama.border.strong}`,
+          })}
         >
           {Array.from({ length: 4 }, (_, index) => (
             <Skeleton key={`summary-head-${index + 1}`} height={16} width="70%" />
@@ -154,25 +148,30 @@ export default function RecentSummaryTable({
           return (
             <Box
               key={`${row.metric}-mobile`}
-              sx={{
-                borderRadius: 2.5,
-                border: '1px solid rgba(226, 232, 240, 0.95)',
-                backgroundColor: 'rgba(248, 250, 252, 0.72)',
+              sx={(theme) => ({
+                borderRadius: `${theme.sama.radius.md}px`,
+                border: `1px solid ${theme.sama.border.subtle}`,
+                backgroundColor: theme.sama.surface.subtle,
                 p: 1.5,
-              }}
+              })}
             >
               <Stack spacing={1.25}>
                 <Box>
                   <Typography
-                    sx={{
-                      color: '#0f172a',
+                    sx={(theme) => ({
+                      color: theme.sama.text.primary,
                       fontSize: '0.95rem',
                       fontWeight: 700,
-                    }}
+                    })}
                   >
                     {row.metric}
                   </Typography>
-                  <Typography sx={{ color: '#64748b', fontSize: '0.82rem' }}>
+                  <Typography
+                    sx={(theme) => ({
+                      color: theme.sama.text.muted,
+                      fontSize: '0.82rem',
+                    })}
+                  >
                     {row.unit}
                   </Typography>
                 </Box>
@@ -185,22 +184,28 @@ export default function RecentSummaryTable({
                   }}
                 >
                   <Stack spacing={0.35}>
-                    <Typography sx={mobileValueLabelStyles}>Latest</Typography>
-                    <Typography sx={{ color: '#0f172a', fontWeight: 600 }}>
+                    <Typography sx={(theme) => ({ ...mobileValueLabelStyles, color: theme.sama.text.muted })}>
+                      Latest
+                    </Typography>
+                    <Typography sx={(theme) => ({ color: theme.sama.text.primary, fontWeight: 600 })}>
                       {formatSummaryValue(row.latest, row.unit === 'currency' ? currency : row.unit)}
                     </Typography>
                   </Stack>
 
                   <Stack spacing={0.35}>
-                    <Typography sx={mobileValueLabelStyles}>Prior Period</Typography>
-                    <Typography sx={{ color: '#334155', fontWeight: 600 }}>
+                    <Typography sx={(theme) => ({ ...mobileValueLabelStyles, color: theme.sama.text.muted })}>
+                      Prior Period
+                    </Typography>
+                    <Typography sx={(theme) => ({ color: theme.sama.text.secondary, fontWeight: 600 })}>
                       {formatSummaryValue(row.prior, row.unit === 'currency' ? currency : row.unit)}
                     </Typography>
                   </Stack>
 
                   <Stack spacing={0.35}>
-                    <Typography sx={mobileValueLabelStyles}>Change</Typography>
-                    <Typography sx={{ color: change.tone, fontWeight: 700 }}>
+                    <Typography sx={(theme) => ({ ...mobileValueLabelStyles, color: theme.sama.text.muted })}>
+                      Change
+                    </Typography>
+                    <Typography sx={(theme) => ({ color: theme.sama.status[change.tone].fg, fontWeight: 700 })}>
                       {change.label}
                     </Typography>
                   </Stack>
@@ -212,22 +217,22 @@ export default function RecentSummaryTable({
       </Stack>
 
       <Box
-        sx={{
+        sx={(theme) => ({
           display: { xs: 'none', sm: 'grid' },
           gridTemplateColumns: rowGridTemplate,
           gap: 2,
           alignItems: 'center',
           px: 1,
           py: 0.85,
-          borderRadius: 2,
-          backgroundColor: 'rgba(248, 250, 252, 0.95)',
-          borderBottom: '1px solid rgba(203, 213, 225, 0.98)',
-        }}
+          borderRadius: `${theme.sama.radius.sm}px`,
+          backgroundColor: theme.sama.surface.subtle,
+          borderBottom: `1px solid ${theme.sama.border.strong}`,
+        })}
       >
-        <Typography sx={headerCellStyles}>Metric</Typography>
-        <Typography sx={{ ...headerCellStyles, textAlign: 'right' }}>Latest</Typography>
-        <Typography sx={{ ...headerCellStyles, textAlign: 'right' }}>Prior Period</Typography>
-        <Typography sx={{ ...headerCellStyles, textAlign: 'right' }}>Change</Typography>
+        <Typography sx={(theme) => ({ ...headerCellStyles, color: theme.sama.text.secondary })}>Metric</Typography>
+        <Typography sx={(theme) => ({ ...headerCellStyles, color: theme.sama.text.secondary, textAlign: 'right' })}>Latest</Typography>
+        <Typography sx={(theme) => ({ ...headerCellStyles, color: theme.sama.text.secondary, textAlign: 'right' })}>Prior Period</Typography>
+        <Typography sx={(theme) => ({ ...headerCellStyles, color: theme.sama.text.secondary, textAlign: 'right' })}>Change</Typography>
       </Box>
 
       {rows?.map((row) => {
@@ -245,21 +250,27 @@ export default function RecentSummaryTable({
             }}
           >
             <Typography
-              sx={{
-                color: '#0f172a',
+              sx={(theme) => ({
+                color: theme.sama.text.primary,
                 fontSize: '0.95rem',
                 fontWeight: 700,
-              }}
+              })}
             >
               {row.metric}
             </Typography>
-            <Typography sx={{ color: '#0f172a', textAlign: 'right', fontWeight: 600 }}>
+            <Typography sx={(theme) => ({ color: theme.sama.text.primary, textAlign: 'right', fontWeight: 600 })}>
               {formatSummaryValue(row.latest, row.unit === 'currency' ? currency : row.unit)}
             </Typography>
-            <Typography sx={{ color: '#334155', textAlign: 'right', fontWeight: 600 }}>
+            <Typography sx={(theme) => ({ color: theme.sama.text.secondary, textAlign: 'right', fontWeight: 600 })}>
               {formatSummaryValue(row.prior, row.unit === 'currency' ? currency : row.unit)}
             </Typography>
-            <Typography sx={{ color: change.tone, textAlign: 'right', fontWeight: 700 }}>
+            <Typography
+              sx={(theme) => ({
+                color: theme.sama.status[change.tone].fg,
+                textAlign: 'right',
+                fontWeight: 700,
+              })}
+            >
               {change.label}
             </Typography>
           </Box>

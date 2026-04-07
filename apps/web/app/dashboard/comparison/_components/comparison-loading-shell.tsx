@@ -1,42 +1,33 @@
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
-
-import OverviewHeader from '@/app/dashboard/overview/_components/overview-header';
-import SectionPanel from '@/app/dashboard/overview/_components/section-panel';
+import {
+  DashboardPageHeader,
+  FilterRail,
+  SectionPanel,
+} from '@sama-energy/ui';
 
 export default function ComparisonLoadingShell() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 3, md: 4 } }}>
-      <OverviewHeader
+      <DashboardPageHeader
         eyebrow="Dashboard Comparison"
         subtitle="Compare battery market performance across selected regions"
       />
 
-      <Card
-        sx={{
-          borderRadius: 3,
-          border: '1px solid rgba(203, 213, 225, 0.98)',
-          boxShadow: 'none',
-          backgroundColor: '#f6f8fb',
-        }}
-      >
-        <CardContent sx={{ p: { xs: 1.25, sm: 1.5 }, '&:last-child': { pb: { xs: 1.25, sm: 1.5 } } }}>
-          <Stack
-            direction={{ xs: 'column', md: 'row' }}
-            justifyContent="space-between"
-            spacing={1.25}
-          >
-            <Stack direction={{ xs: 'column', md: 'row' }} spacing={1.25}>
-              <Skeleton height={42} sx={{ borderRadius: 3, width: { xs: '100%', md: 260 } }} variant="rounded" />
-              <Skeleton height={42} sx={{ borderRadius: 3, width: { xs: '100%', md: 210 } }} variant="rounded" />
-            </Stack>
-            <Skeleton height={42} sx={{ borderRadius: 3, width: { xs: '100%', md: 170 } }} variant="rounded" />
+      <FilterRail>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          justifyContent="space-between"
+          spacing={1.25}
+        >
+          <Stack direction={{ xs: 'column', md: 'row' }} spacing={1.25}>
+            <Skeleton height={42} sx={{ borderRadius: 3, width: { xs: '100%', md: 260 } }} variant="rounded" />
+            <Skeleton height={42} sx={{ borderRadius: 3, width: { xs: '100%', md: 210 } }} variant="rounded" />
           </Stack>
-        </CardContent>
-      </Card>
+          <Skeleton height={42} sx={{ borderRadius: 3, width: { xs: '100%', md: 170 } }} variant="rounded" />
+        </Stack>
+      </FilterRail>
 
       <SectionPanel
         title="KPI Comparison"

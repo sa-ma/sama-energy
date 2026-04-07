@@ -7,6 +7,10 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import {
+  DashboardPageHeader,
+  SectionPanel,
+} from '@sama-energy/ui';
+import {
   keepPreviousData,
   useQuery,
 } from '@tanstack/react-query';
@@ -23,8 +27,6 @@ import {
   useQueryStates,
 } from 'nuqs';
 
-import OverviewHeader from '@/app/dashboard/overview/_components/overview-header';
-import SectionPanel from '@/app/dashboard/overview/_components/section-panel';
 import {
   getComparison,
   getMarkets,
@@ -219,7 +221,7 @@ export default function ComparisonDashboard() {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 3, md: 4 } }}>
-      <OverviewHeader
+      <DashboardPageHeader
         eyebrow="Dashboard Comparison"
         subtitle="Compare battery market performance across selected regions"
       />

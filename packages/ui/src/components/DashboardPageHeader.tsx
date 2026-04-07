@@ -1,18 +1,20 @@
+'use client';
+
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-type OverviewHeaderProps = {
+type DashboardPageHeaderProps = Readonly<{
   eyebrow?: string;
   title?: string;
   subtitle: string;
-};
+}>;
 
-export default function OverviewHeader({
+export function DashboardPageHeader({
   eyebrow = 'Dashboard Overview',
   title,
   subtitle,
-}: OverviewHeaderProps) {
+}: DashboardPageHeaderProps) {
   return (
     <Box
       sx={{
@@ -28,7 +30,6 @@ export default function OverviewHeader({
           variant="overline"
           sx={{
             color: 'text.secondary',
-            letterSpacing: '0.14em',
           }}
         >
           {eyebrow}
@@ -36,13 +37,13 @@ export default function OverviewHeader({
         {title ? (
           <Typography
             component="h1"
-            sx={{
-              fontSize: { xs: '2rem', md: '2.5rem' },
-              fontWeight: 700,
-              lineHeight: 1.1,
-              letterSpacing: '-0.03em',
-              color: '#16202a',
-            }}
+            sx={(theme) => ({
+              fontSize: { xs: '2rem', md: theme.typography.h1.fontSize },
+              fontWeight: theme.typography.h1.fontWeight,
+              lineHeight: theme.typography.h1.lineHeight,
+              letterSpacing: theme.typography.h1.letterSpacing,
+              color: theme.sama.text.primary,
+            })}
           >
             {title}
           </Typography>
