@@ -18,6 +18,7 @@ export function useSamaChartTheme() {
       fontWeight: 600,
     },
     gridStroke: theme.sama.chart.grid,
+    gridStrokeWidth: 1,
     cursorLine: {
       stroke: theme.sama.chart.cursor,
       strokeWidth: 1,

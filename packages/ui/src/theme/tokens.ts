@@ -5,6 +5,14 @@ export type SamaStatusTone = {
 };
 
 export type SamaThemeTokens = {
+  accent: {
+    primary: string;
+    strong: string;
+    muted: string;
+    subtle: string;
+    border: string;
+    focusRing: string;
+  };
   surface: {
     canvas: string;
     subtle: string;
@@ -56,11 +64,19 @@ export type SamaThemeTokens = {
 };
 
 export const samaTokens: SamaThemeTokens = {
+  accent: {
+    primary: '#665ab1',
+    strong: '#9668fb',
+    muted: 'rgba(102, 90, 177, 0.14)',
+    subtle: 'rgba(102, 90, 177, 0.08)',
+    border: 'rgba(102, 90, 177, 0.22)',
+    focusRing: 'rgba(102, 90, 177, 0.28)',
+  },
   surface: {
-    canvas: '#f5f5f3',
-    subtle: '#fafaf8',
+    canvas: '#ffffff',
+    subtle: '#f5f5f3',
     raised: 'rgba(255, 255, 255, 0.96)',
-    overlay: 'rgba(250, 250, 248, 0.98)',
+    overlay: 'rgba(255, 255, 255, 0.98)',
   },
   border: {
     subtle: 'rgba(226, 232, 240, 0.95)',
@@ -88,18 +104,18 @@ export const samaTokens: SamaThemeTokens = {
       border: 'rgba(253, 186, 116, 0.62)',
     },
     info: {
-      fg: '#2563eb',
-      surface: 'rgba(239, 246, 255, 0.9)',
-      border: 'rgba(147, 197, 253, 0.72)',
+      fg: '#665ab1',
+      surface: 'rgba(245, 241, 255, 0.92)',
+      border: 'rgba(177, 163, 235, 0.72)',
     },
   },
   chart: {
-    series: ['#2563eb', '#dc2626', '#16a34a'],
-    revenueBar: '#93c5fd',
-    revenueBarActive: '#60a5fa',
-    revenueBarStroke: 'rgba(37, 99, 235, 0.18)',
+    series: ['#665ab1', '#dc2626', '#16a34a'],
+    revenueBar: 'rgba(150, 104, 251, 0.72)',
+    revenueBarActive: '#9668fb',
+    revenueBarStroke: 'rgba(102, 90, 177, 0.2)',
     axisText: '#475569',
-    grid: 'rgba(148, 163, 184, 0.24)',
+    grid: 'rgba(148, 163, 184, 0.32)',
     legendText: '#334155',
     cursor: 'rgba(15, 23, 42, 0.12)',
     cursorFill: 'rgba(15, 23, 42, 0.04)',

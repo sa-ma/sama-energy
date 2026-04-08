@@ -11,6 +11,7 @@ type SectionPanelProps = Readonly<{
   children: React.ReactNode;
   title: string;
   subtitle?: string;
+  variant?: 'plain' | 'outlined';
   minHeight?: number;
   contentPadding?: { xs: number; sm: number; md: number };
   bleedContentX?: ResponsiveBleed;
@@ -22,6 +23,7 @@ export function SectionPanel({
   children,
   title,
   subtitle,
+  variant = 'plain',
   minHeight = 320,
   contentPadding = { xs: 2, sm: 2.5, md: 3 },
   bleedContentX = false,
@@ -45,7 +47,9 @@ export function SectionPanel({
     <Card
       sx={(theme) => ({
         height: 1,
-        border: `1px solid ${theme.sama.border.strong}`,
+        border: variant === 'outlined' ? `1px solid ${theme.sama.border.strong}` : 'none',
+        backgroundColor: variant === 'plain' ? 'transparent' : undefined,
+        boxShadow: 'none',
       })}
     >
       <CardContent

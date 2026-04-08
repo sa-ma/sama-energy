@@ -224,6 +224,7 @@ export default function OverviewDashboard() {
 
       {hasInitialError ? (
         <SectionPanel
+          variant="outlined"
           title="Overview unavailable"
           subtitle="The current market selection could not be loaded."
           minHeight={240}

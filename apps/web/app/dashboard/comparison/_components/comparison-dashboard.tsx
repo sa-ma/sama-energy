@@ -229,6 +229,7 @@ export default function ComparisonDashboard() {
 
       {hasInitialError ? (
         <SectionPanel
+          variant="outlined"
           title="Comparison unavailable"
           subtitle="The current market selection could not be loaded."
           minHeight={240}

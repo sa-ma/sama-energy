@@ -107,6 +107,7 @@ export function FilterSelectField({
       <Select
         displayEmpty
         inputProps={{ 'aria-label': ariaLabel }}
+        MenuProps={{ disableScrollLock: true }}
         value={value}
         onChange={(event) => onChange(event.target.value as string | number)}
         sx={{

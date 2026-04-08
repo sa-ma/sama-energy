@@ -13,7 +13,8 @@ export function createSamaTheme(options: ThemeOptions = {}) {
     palette: {
       mode: 'light',
       primary: {
-        main: samaTokens.chart.series[0],
+        main: samaTokens.accent.primary,
+        light: samaTokens.accent.strong,
       },
       success: {
         main: samaTokens.status.positive.fg,
@@ -35,7 +36,7 @@ export function createSamaTheme(options: ThemeOptions = {}) {
       divider: samaTokens.border.strong,
     },
     typography: {
-      fontFamily: 'var(--font-roboto)',
+      fontFamily: 'var(--font-open-sans)',
       h1: {
         fontSize: '2.5rem',
         fontWeight: 700,
@@ -65,11 +66,15 @@ export function createSamaTheme(options: ThemeOptions = {}) {
         styleOverrides: {
           html: {
             minHeight: '100%',
+            backgroundColor: samaTokens.surface.canvas,
           },
           body: {
             minHeight: '100%',
             margin: 0,
             backgroundColor: samaTokens.surface.canvas,
+          },
+          '::selection': {
+            backgroundColor: alpha(samaTokens.accent.primary, 0.18),
           },
           '*, *::before, *::after': {
             boxSizing: 'border-box',
@@ -123,14 +128,14 @@ export function createSamaTheme(options: ThemeOptions = {}) {
             fontWeight: 600,
             lineHeight: 1.2,
             '&.Mui-selected': {
-              backgroundColor: alpha(theme.sama.text.secondary, 0.08),
-              color: theme.sama.text.primary,
+              backgroundColor: theme.sama.accent.muted,
+              color: theme.palette.primary.main,
             },
             '&.Mui-selected:hover': {
-              backgroundColor: alpha(theme.sama.text.secondary, 0.11),
+              backgroundColor: alpha(theme.palette.primary.main, 0.18),
             },
             '&:hover': {
-              backgroundColor: alpha(theme.sama.text.secondary, 0.04),
+              backgroundColor: theme.sama.accent.subtle,
             },
           }),
         },
@@ -157,10 +162,13 @@ export function createSamaTheme(options: ThemeOptions = {}) {
               borderColor: theme.sama.border.strong,
             },
             '&:hover .MuiOutlinedInput-notchedOutline': {
-              borderColor: theme.sama.text.secondary,
+              borderColor: theme.sama.accent.border,
             },
             '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
               borderColor: theme.palette.primary.main,
+            },
+            '&.Mui-focused': {
+              boxShadow: `0 0 0 4px ${theme.sama.accent.subtle}`,
             },
           }),
           input: ({ theme }: { theme: Theme }) => ({
@@ -216,6 +224,16 @@ export function createSamaTheme(options: ThemeOptions = {}) {
             color: theme.sama.text.muted,
             '&.Mui-checked': {
               color: theme.palette.primary.main,
+            },
+          }),
+        },
+      },
+      MuiIconButton: {
+        styleOverrides: {
+          root: ({ theme }: { theme: Theme }) => ({
+            '&:focus-visible': {
+              outline: `2px solid ${theme.sama.accent.focusRing}`,
+              outlineOffset: 2,
             },
           }),
         },

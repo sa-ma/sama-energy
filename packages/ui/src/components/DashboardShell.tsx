@@ -27,7 +27,8 @@ export function DashboardShell({ children, header }: DashboardShellProps) {
           <Box
             sx={{
               px: { xs: 2.5, sm: 4, lg: 5 },
-              py: { xs: 1.25, sm: 1.5, lg: 1.75 },
+              pt: { xs: 1.25, sm: 1.5, lg: 1.75 },
+              pb: { xs: 1.25, sm: 0, lg: 0 },
             }}
           >
             {header}

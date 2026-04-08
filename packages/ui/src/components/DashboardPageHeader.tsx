@@ -26,9 +26,11 @@ export function DashboardPageHeader({
         {eyebrow ? (
           <Typography
             variant="overline"
-            sx={{
-              color: 'text.secondary',
-            }}
+            sx={(theme) => ({
+              color: theme.palette.primary.main,
+              letterSpacing: '0.16em',
+              opacity: 0.9,
+            })}
           >
             {eyebrow}
           </Typography>

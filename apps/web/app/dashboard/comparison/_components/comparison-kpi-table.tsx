@@ -45,7 +45,7 @@ export default function ComparisonKpiTable({
   rows,
   rankings,
 }: ComparisonKpiTableProps) {
-  const cellPaddingX = { xs: 2, sm: 2.5, md: 3 } as const;
+  const cellPaddingX = { xs: 1.25, sm: 1.75, md: 2 } as const;
 
   return (
     <TableContainer>
@@ -85,7 +85,7 @@ export default function ComparisonKpiTable({
               <TableCell
                 sx={{
                   px: cellPaddingX,
-                  py: 1.85,
+                  py: 1.25,
                   borderBottom:
                     rowIndex === rows.length - 1 ? '0 !important' : undefined,
                 }}
@@ -112,7 +112,7 @@ export default function ComparisonKpiTable({
                     align="right"
                     sx={{
                       px: cellPaddingX,
-                      py: 1.85,
+                      py: 1.25,
                       borderBottom:
                         rowIndex === rows.length - 1 ? '0 !important' : undefined,
                     }}

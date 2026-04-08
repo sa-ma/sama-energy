@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { alpha } from '@mui/material/styles';
 
 export type DashboardNavLink = {
   href: string;
@@ -38,30 +39,34 @@ export function DashboardNav({
     <Box
       sx={{
         display: 'flex',
-        flexDirection: { xs: 'column', sm: 'row' },
-        alignItems: { xs: 'stretch', sm: 'center' },
-        justifyContent: 'space-between',
+        flexDirection: 'column',
         gap: 1.25,
         minHeight: 40,
+        position: 'relative',
       }}
     >
       <Box
         sx={{
           display: 'flex',
           alignItems: 'center',
+          minWidth: 0,
+          minHeight: { xs: 40, sm: 56 },
           justifyContent: 'space-between',
           gap: 1,
-          minHeight: 40,
         }}
       >
         <Typography
           component="div"
           sx={(theme) => ({
+            display: 'flex',
+            alignItems: 'center',
+            minHeight: { sm: 56 },
             color: theme.sama.text.primary,
             fontSize: '0.9rem',
             fontWeight: 800,
             letterSpacing: '0.16em',
             lineHeight: 1,
+            whiteSpace: 'nowrap',
           })}
         >
           {brand}
@@ -74,15 +79,15 @@ export function DashboardNav({
           onClick={() => setMobileMenuOpen((open) => !open)}
           sx={(theme) => ({
             display: { xs: 'inline-flex', sm: 'none' },
-            color: theme.sama.text.primary,
-            border: `1px solid ${theme.sama.border.strong}`,
-            backgroundColor: theme.sama.surface.subtle,
+            color: theme.palette.primary.main,
+            border: `1px solid ${theme.sama.accent.border}`,
+            backgroundColor: alpha(theme.palette.primary.main, 0.05),
             borderRadius: `${theme.sama.radius.pill}px`,
             '&:hover': {
-              backgroundColor: theme.sama.surface.overlay,
+              backgroundColor: theme.sama.accent.subtle,
             },
             '&:focus-visible': {
-              outline: `2px solid ${theme.sama.text.primary}`,
+              outline: `2px solid ${theme.sama.accent.focusRing}`,
               outlineOffset: 2,
             },
           })}
@@ -94,23 +99,25 @@ export function DashboardNav({
       <Stack
         id={mobileMenuId}
         direction={{ xs: 'column', sm: 'row' }}
-        spacing={0.75}
+        spacing={{ xs: 0.35, sm: 4.5 }}
         sx={(theme) => ({
           display: { xs: mobileMenuOpen ? 'flex' : 'none', sm: 'flex' },
-          alignSelf: { xs: 'stretch', sm: 'auto' },
+          position: { sm: 'absolute' },
+          left: { sm: '50%' },
+          top: { sm: 0 },
+          bottom: { sm: 0 },
+          transform: { sm: 'translateX(-50%)' },
+          alignItems: { xs: 'stretch', sm: 'center' },
           ml: { xs: `calc(-${mobileGutter}px - env(safe-area-inset-left))`, sm: 0 },
           mr: { xs: `calc(-${mobileGutter}px - env(safe-area-inset-right))`, sm: 0 },
-          pl: { xs: `calc(${mobileGutter}px + env(safe-area-inset-left))`, sm: 0.35 },
-          pr: { xs: `calc(${mobileGutter}px + env(safe-area-inset-right))`, sm: 0.35 },
-          pt: { xs: 0.75, sm: 0.35 },
-          pb: { xs: 0, sm: 0.35 },
-          borderRadius: { xs: 0, sm: `${theme.sama.radius.pill}px` },
-          borderTop: `1px solid ${theme.sama.border.strong}`,
-          borderRight: { xs: 'none', sm: `1px solid ${theme.sama.border.strong}` },
-          borderBottom: { xs: 'none', sm: `1px solid ${theme.sama.border.strong}` },
-          borderLeft: { xs: 'none', sm: `1px solid ${theme.sama.border.strong}` },
-          backgroundColor: theme.sama.surface.subtle,
-          overflow: 'hidden',
+          pl: { xs: `calc(${mobileGutter}px + env(safe-area-inset-left))`, sm: 0 },
+          pr: { xs: `calc(${mobileGutter}px + env(safe-area-inset-right))`, sm: 0 },
+          pt: { xs: 1, sm: 0 },
+          pb: { xs: 0.5, sm: 0 },
+          mt: { xs: 0.1, sm: 0 },
+          minWidth: 0,
+          borderTop: { xs: `1px solid ${theme.sama.border.strong}`, sm: 'none' },
+          backgroundColor: { xs: theme.sama.surface.raised, sm: 'transparent' },
         })}
       >
         {links.map((link) => {
@@ -124,31 +131,41 @@ export function DashboardNav({
               onClick={() => setMobileMenuOpen(false)}
               sx={(theme) => ({
                 flex: { xs: 1, sm: '0 0 auto' },
-                borderRadius: { xs: 0, sm: `${theme.sama.radius.pill}px` },
-                px: 1.2,
-                py: 0.62,
-                textAlign: 'center',
-                color: isActive ? theme.sama.text.primary : theme.sama.text.muted,
-                backgroundColor: isActive ? theme.sama.surface.raised : 'transparent',
-                border: '1px solid transparent',
-                boxShadow: {
-                  xs: 'none',
-                  sm: isActive ? '0 1px 2px rgba(15, 23, 42, 0.06)' : 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                px: { xs: 1.2, sm: 0.2 },
+                py: { xs: 0.95, sm: 0 },
+                textAlign: { xs: 'left', sm: 'center' },
+                color: isActive ? theme.sama.text.primary : theme.sama.text.secondary,
+                backgroundColor: {
+                  xs: isActive ? theme.sama.accent.subtle : 'transparent',
+                  sm: 'transparent',
                 },
-                fontSize: '0.84rem',
-                fontWeight: 700,
+                borderLeft: {
+                  xs: `2px solid ${isActive ? theme.palette.primary.main : 'transparent'}`,
+                  sm: 'none',
+                },
+                borderBottom: {
+                  xs: 'none',
+                  sm: `2px solid ${isActive ? theme.palette.primary.main : 'transparent'}`,
+                },
+                fontSize: '0.9rem',
+                fontWeight: { xs: isActive ? 700 : 600, sm: isActive ? 650 : 500 },
                 lineHeight: 1,
-                transition:
-                  'background-color 160ms ease, box-shadow 160ms ease, border-color 160ms ease, color 160ms ease',
+                minHeight: { sm: '100%' },
+                transition: 'background-color 160ms ease, border-color 160ms ease, color 160ms ease',
                 '&:hover': {
                   color: theme.sama.text.primary,
-                  backgroundColor: isActive
-                    ? theme.sama.surface.overlay
-                    : 'rgba(255, 255, 255, 0.6)',
+                  borderBottomColor: theme.palette.primary.main,
+                  backgroundColor: {
+                    xs: isActive ? theme.sama.accent.subtle : alpha(theme.palette.primary.main, 0.04),
+                    sm: 'transparent',
+                  },
                 },
                 '&:focus-visible': {
-                  outline: `2px solid ${theme.sama.text.primary}`,
-                  outlineOffset: -2,
+                  outline: `2px solid ${theme.sama.accent.focusRing}`,
+                  outlineOffset: 2,
                 },
               })}
             >

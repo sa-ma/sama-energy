@@ -168,7 +168,11 @@ export default function ComparisonTrendChart({
     >
       <ResponsiveContainer height={chartHeight} width="100%">
         <LineChart data={chartData} margin={{ top: 8, right: 16, left: -12, bottom: 0 }}>
-          <CartesianGrid stroke={chartTheme.gridStroke} vertical={false} />
+          <CartesianGrid
+            stroke={chartTheme.gridStroke}
+            strokeWidth={chartTheme.gridStrokeWidth}
+            vertical
+          />
           <XAxis
             axisLine={false}
             dataKey="date"

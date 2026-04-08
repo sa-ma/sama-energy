@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Roboto } from 'next/font/google';
+import { Open_Sans } from 'next/font/google';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { SamaThemeProvider } from '@sama-energy/ui';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
@@ -13,11 +13,11 @@ export const metadata: Metadata = {
   description: 'Next.js and Material UI frontend scaffold for the monorepo',
 };
 
-const roboto = Roboto({
+const openSans = Open_Sans({
   weight: ['300', '400', '500', '700'],
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-roboto',
+  variable: '--font-open-sans',
 });
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={roboto.variable}>
+    <html lang="en" className={openSans.variable}>
       <body>
         <AppRouterCacheProvider>
           <SamaThemeProvider>

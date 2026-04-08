@@ -23,11 +23,15 @@ type SelectOption<T extends string | number> = {
 const visuallyHidden = {
   border: 0,
   clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  display: 'block',
   height: 1,
+  left: 0,
   margin: -1,
   overflow: 'hidden',
   padding: 0,
   position: 'absolute',
+  top: 0,
   whiteSpace: 'nowrap',
   width: 1,
 } as const;
