@@ -45,7 +45,7 @@ export function MetricTile({
 
   return (
     <Box sx={composedSx}>
-      <Stack spacing={0.7}>
+      <Stack spacing={0.7} sx={{ width: 1, height: 1, justifyContent: 'space-between' }}>
         <Box
           sx={{
             display: 'flex',
