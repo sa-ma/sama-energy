@@ -1,0 +1,23 @@
+packages/ui/src/components/MetricTile.tsx
+  5767bc32ba296818 48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.5",
+  "base_commit_sha": "2cc9a2232e588665408cd00effa82b89b63c2e39",
+  "prompts": {
+    "5767bc32ba296818": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019d6d72-4c1a-7853-b703-e2c980056b2b",
+        "model": "gpt-5.4"
+      },
+      "human_author": "Samaila Bala",
+      "messages": [],
+      "total_additions": 21,
+      "total_deletions": 21,
+      "accepted_lines": 10,
+      "overriden_lines": 0
+    }
+  }
+}
